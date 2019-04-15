@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="com.myf">
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
     <!-- 这个权限用于进行网络定位 -->
@@ -67,12 +68,14 @@
     <uses-feature android:name="android.hardware.camera.flash"/>
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false"
+        android:hardwareAccelerated="true"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup">
         <meta-data
             android:name="design_width"
             android:value="750">
@@ -81,7 +84,8 @@
             android:name="design_height"
             android:value="1334">
         </meta-data>
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.MainActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

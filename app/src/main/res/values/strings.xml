@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">myf</string>
+    <string name="app_name">appName</string>
     <string name="format_retry_send">%dS</string>
 </resources>
