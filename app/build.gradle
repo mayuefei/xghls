@@ -12,14 +12,41 @@ android {
         javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
 
     }
+    signingConfigs {
+        release {
+            try {
+                storeFile file(RELEASE_KEY_FILE)
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            }
+            catch (ignored) {
+                throw new InvalidUserDataException("You should define KEYSTORE_PASSWORD and KEY_PASSWORD in gradle.properties.")
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            signingConfig signingConfigs.debug
+            debuggable true
+            zipAlignEnabled false
         }
     }
     configurations.all {
         resolutionStrategy.force 'com.android.support:support-annotations:26.1.0'
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'
+        }
     }
 }
 
