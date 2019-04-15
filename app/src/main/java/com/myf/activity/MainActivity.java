@@ -20,27 +20,5 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initView();
-    }
-
-    private void initView() {
-        VerifyImage();
-    }
-    private void VerifyImage() {
-        showLoadingDialog(this, false);
-        OkHttpApi.getInstance().getVerifyImageRespones("15135160068", new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                closeLoadingDialog();
-                ToastUtil.showToast(MainActivity.this, "网络连接失败", Toast.LENGTH_SHORT);
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                closeLoadingDialog();
-                LogUtil.e(TAG, "刷新验证码：" + response);
-             
-            }
-        }, TAG);
     }
 }
