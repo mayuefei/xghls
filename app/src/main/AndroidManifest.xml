@@ -95,7 +95,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.ChooseSchoolActivity"></activity>
+        <activity android:name=".activity.ChooseSchoolActivity" />
+        <activity android:name=".activity.HomeActivity" />
+        <activity android:name=".activity.GenerationTakeActivity" />
+        <activity android:name=".activity.GenerationTakeAndToMailActivity"></activity>
     </application>
 
 </manifest>

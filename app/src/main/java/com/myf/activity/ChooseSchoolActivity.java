@@ -1,6 +1,7 @@
 package com.myf.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -67,7 +68,8 @@ public class ChooseSchoolActivity extends BaseActivity {
         mBtnEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent =new Intent(ChooseSchoolActivity.this,HomeActivity.class);
+                startActivity(intent);
             }
         });
     }

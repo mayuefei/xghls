@@ -64,4 +64,5 @@ dependencies {
     compile 'com.zhy:okhttputils:2.6.2'
     compile 'com.zhy:autolayout:1.4.5'
     compile 'com.youth.banner:banner:1.4.1'
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
 }

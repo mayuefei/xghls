@@ -69,7 +69,7 @@ public class LoginActivity extends BaseActivity {
                     ToastUtil.showToast(LoginActivity.this,"请输入正确的密码",Toast.LENGTH_SHORT);
                     return;
                 }
-                Intent intent = new Intent(LoginActivity.this,ChooseSchoolActivity.class);
+                Intent intent = new Intent(LoginActivity.this,GenerationTakeAndToMailActivity.class);
                 startActivity(intent);
 
             }
