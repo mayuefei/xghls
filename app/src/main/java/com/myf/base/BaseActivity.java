@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,6 +28,8 @@ import com.myf.listener.HintTwoSelectListener;
 import com.myf.view.MyProgressDialog;
 
 import java.lang.reflect.Field;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -210,4 +214,32 @@ public class BaseActivity extends AppCompatActivity {
             im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+    /**
+     * 禁止EditText输入空格、特殊字符
+     *
+     * @param editText
+     */
+    public static void setEditTextInhibitInputSpaChat(EditText editText) {
+        InputFilter filter_space = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                if (source.equals(" "))
+                    return "";
+                else
+                    return null;
+            }
+        };
+        InputFilter filter_speChat = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence charSequence, int i, int i1, Spanned spanned, int i2, int i3) {
+                String speChat = "[`~!@#_$%^&*()+=|{}':;',\\[\\].<>~！@#￥%……&*（）— +|{}【】‘；：”“’。，、？]";
+                Pattern pattern = Pattern.compile(speChat);
+                Matcher matcher = pattern.matcher(charSequence.toString());
+                if (matcher.find()) return "";
+                else return null;
+            }
+        };
+        editText.setFilters(new InputFilter[]{filter_space, filter_speChat});
+    }
+
 }

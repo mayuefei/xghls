@@ -12,8 +12,9 @@ import com.youth.banner.loader.ImageLoader;
 public class GlideImageLoader implements ImageLoader {
     @Override
     public void displayImage(Context context, Object path, ImageView imageView) {
-        Picasso.with(context).load((String)path)
+//        Picasso.with(context).load((String)path)
 //                .error(R.mipmap.loaderror)
+        Picasso.with(context).load((Integer) path)
                 .into(imageView);
     }
 }
