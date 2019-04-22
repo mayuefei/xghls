@@ -9,10 +9,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.myf.R;
 import com.myf.listener.HintOneListener;
 import com.myf.listener.HintTwoSelectListener;
 import com.myf.view.MyProgressDialog;
+import com.xihls.R;
 
 
 /**

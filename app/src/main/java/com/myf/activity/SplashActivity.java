@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.ImageView;
 
-import com.myf.R;
 import com.myf.base.BaseActivity;
+import com.xihls.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

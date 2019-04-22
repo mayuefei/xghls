@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.myf">
+    package="com.xihls">
 
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <!-- 这个权限用于进行网络定位 -->
@@ -85,20 +85,20 @@
             android:value="1334" />
 
         <activity
-            android:name=".activity.MainActivity"
+            android:name="com.myf.activity.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name="com.myf.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.ChooseSchoolActivity" />
-        <activity android:name=".activity.HomeActivity" />
-        <activity android:name=".activity.GenerationTakeActivity" />
-        <activity android:name=".activity.GenerationTakeAndToMailActivity"></activity>
+        <activity android:name="com.myf.activity.LoginActivity" />
+        <activity android:name="com.myf.activity.ChooseSchoolActivity" />
+        <activity android:name="com.myf.activity.HomeActivity" />
+        <activity android:name="com.myf.activity.GenerationTakeActivity" />
+        <activity android:name="com.myf.activity.GenerationTakeAndToMailActivity"></activity>
     </application>
 
 </manifest>

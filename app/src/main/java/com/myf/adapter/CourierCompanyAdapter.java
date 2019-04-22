@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.myf.R;
+import com.xihls.R;
 
 import java.util.ArrayList;
 

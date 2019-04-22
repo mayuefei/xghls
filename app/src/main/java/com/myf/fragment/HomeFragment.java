@@ -11,11 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.myf.R;
 import com.myf.activity.GenerationTakeActivity;
 import com.myf.base.BaseFragment;
 import com.myf.util.GlideImageLoader;
 import com.myf.util.RefreshListener;
+import com.xihls.R;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;

@@ -10,9 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.myf.R;
 import com.myf.base.BaseFragment;
 import com.myf.util.RefreshListener;
+import com.xihls.R;
 import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.AutoRelativeLayout;
 

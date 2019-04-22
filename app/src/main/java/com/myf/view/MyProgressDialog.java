@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.TextView;
 
-import com.myf.R;
+import com.xihls.R;
 
 
 /**

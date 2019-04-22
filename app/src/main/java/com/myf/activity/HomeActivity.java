@@ -12,12 +12,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.myf.R;
 import com.myf.base.BaseActivity;
 import com.myf.fragment.HomeFragment;
 import com.myf.fragment.MyFragment;
 import com.myf.listener.HintTwoSelectListener;
 import com.myf.util.Constant;
+import com.xihls.R;
 import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.AutoRelativeLayout;
 

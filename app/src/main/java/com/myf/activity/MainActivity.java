@@ -2,8 +2,8 @@ package com.myf.activity;
 
 import android.os.Bundle;
 
-import com.myf.R;
 import com.myf.base.BaseActivity;
+import com.xihls.R;
 
 public class MainActivity extends BaseActivity {
 

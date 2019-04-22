@@ -8,8 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.myf.R;
 import com.myf.view.MyProgressDialog;
+import com.xihls.R;
 
 import java.lang.reflect.Field;
 
