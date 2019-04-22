@@ -11,11 +11,12 @@ import android.widget.Toast;
 
 import com.myf.base.BaseActivity;
 import com.myf.util.ToastUtil;
-import com.xihls.R;
+import com.xghls.R;
 import com.zhy.autolayout.AutoLinearLayout;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
 
 public class LoginActivity extends BaseActivity {
 
@@ -35,6 +36,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        JPushInterface.init(getApplicationContext());
         initView();
         initData();
         initEvent();

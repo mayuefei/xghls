@@ -9,7 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.myf.view.MyProgressDialog;
-import com.xihls.R;
+import com.xghls.R;
 
 import java.lang.reflect.Field;
 

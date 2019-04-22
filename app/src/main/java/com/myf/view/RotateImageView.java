@@ -7,7 +7,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 
-import com.xihls.R;
+import com.xghls.R;
 
 
 /**

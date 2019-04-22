@@ -3,7 +3,7 @@ package com.myf.activity;
 import android.os.Bundle;
 
 import com.myf.base.BaseActivity;
-import com.xihls.R;
+import com.xghls.R;
 
 public class MainActivity extends BaseActivity {
 

@@ -16,7 +16,7 @@ import com.myf.fragment.GenerationTakeFragment;
 import com.myf.fragment.ToMailFragment;
 import com.myf.listener.HintTwoSelectListener;
 import com.myf.util.Constant;
-import com.xihls.R;
+import com.xghls.R;
 import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.AutoRelativeLayout;
 

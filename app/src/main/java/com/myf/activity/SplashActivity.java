@@ -6,7 +6,7 @@ import android.os.CountDownTimer;
 import android.widget.ImageView;
 
 import com.myf.base.BaseActivity;
-import com.xihls.R;
+import com.xghls.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

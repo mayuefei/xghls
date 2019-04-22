@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.myf.base.BaseFragment;
 import com.myf.util.RefreshListener;
 import com.myf.util.ToastUtil;
-import com.xihls.R;
+import com.xghls.R;
 import com.zhy.autolayout.AutoLinearLayout;
 
 import butterknife.Bind;

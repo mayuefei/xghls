@@ -10,6 +10,7 @@ import com.zhy.http.okhttp.cookie.store.PersistentCookieStore;
 
 import java.util.concurrent.TimeUnit;
 
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.OkHttpClient;
 
 /**
@@ -34,6 +35,8 @@ public class MyfApplication extends Application {
         OkHttpUtils.initClient(okHttpClient);
         //初始化Okhttp设置
         OkHttpApi.init(this);
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 
     public static Context getContext() {

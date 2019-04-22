@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.myf.adapter.CourierCompanyAdapter;
 import com.myf.base.BaseActivity;
-import com.xihls.R;
+import com.xghls.R;
 import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.AutoRelativeLayout;
 
