@@ -55,6 +55,8 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
     AutoRelativeLayout mRlXgdj;
     @Bind(R.id.rl_container)
     AutoRelativeLayout mRlContainer;
+    @Bind(R.id.ll_set_up_the)
+    AutoLinearLayout mLlSetUpThe;
     private LoginStateChangeReceiver mLoginStateChangeReceiver;
     private GenerationTakeFragment mGenerationTakeFragment;//代取
     private ToMailFragment mToMailFragment;//代寄
@@ -74,6 +76,15 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
     }
 
     private void initEvent() {
+        //设置按钮
+        //设置
+        mLlSetUpThe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GenerationTakeAndToMailActivity.this,SetUpTheActivity.class);
+                startActivity(intent);
+            }
+        });
         //代取
         mRlXgdq.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +106,8 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
     }
 
     private void initView() {
+        //设置
+        mLlSetUpThe.setVisibility(View.VISIBLE);
         mRlTitleBg.setBackgroundColor(Color.parseColor("#fe8cab"));
         mTvTitle.setText("山西传媒学院");
         //根据mTargetTabPosition的值显示不同的界面
