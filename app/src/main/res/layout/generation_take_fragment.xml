@@ -8,8 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="86px"
         android:orientation="horizontal"
-        android:paddingLeft="24px"
-        android:paddingRight="24px"
+        android:paddingLeft="65px"
+        android:paddingRight="65px"
         android:layout_marginTop="24px"
         android:layout_marginBottom="24px">
         <RadioButton
@@ -41,12 +41,14 @@
             android:gravity="center"
             android:background="@drawable/bg_tv_afternoon_single_color"/>
         <View
+            android:visibility="gone"
             android:layout_width="2px"
             android:layout_height="match_parent"
             android:layout_marginTop="10px"
             android:layout_marginBottom="10px"
             android:background="@color/cfe8cab"/>
         <RadioButton
+            android:visibility="gone"
             android:id="@+id/rb_that_very_day_summarizing"
             android:layout_width="0dp"
             android:layout_height="match_parent"

@@ -104,10 +104,41 @@ public class OkHttpApi implements MyfApi {
         }
         getBuilder.build().execute(callback);
     }
+
+    /**
+     * 登录接口
+     * @param username
+     * @param password
+     * @param device_type
+     * @param callback
+     * @param tag
+     */
+    @Override
+    public void getLoginRespones(String username, String password, String device_type, StringCallback callback, String tag) {
+        Map<String,String> params = new HashMap<>();
+        params.put("username",username);
+        params.put("password",password);
+        params.put("device_type",device_type);
+        asyncGet(CARD_URL_LOGIN,params,callback);
+    }
+
+    /**
+     * 骑手端员工信息
+     * @param token
+     * @param callback
+     * @param tag
+     */
+    @Override
+    public void getUserInfoRespones(String token, StringCallback callback, String tag) {
+        Map<String,String> params = new HashMap<>();
+        params.put("token",token);
+        asyncGet(CARD_USER_INFO,params,callback);
+    }
+
     @Override
     public void getVerifyImageRespones(String logonId, StringCallback callback, String tag) {
         Map<String, String> params = new HashMap<>();
         params.put("update", "6666");
-        asyncGet(VERIFYIMAGE, params, callback);
+//        asyncGet(VERIFYIMAGE, params, callback);
     }
 }

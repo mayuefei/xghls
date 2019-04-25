@@ -171,7 +171,7 @@
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="4725d8adbf9a344dbd1acc47" /> <!-- </>值来自开发者平台取得的AppKey -->
-        <activity android:name="com.myf.activity.SetUpTheActivity"></activity>
+        <activity android:name="com.myf.activity.PersonalCenterActivity"></activity>
     </application>
 
 </manifest>

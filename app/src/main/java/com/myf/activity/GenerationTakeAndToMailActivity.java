@@ -8,20 +8,31 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.myf.base.BaseActivity;
 import com.myf.fragment.GenerationTakeFragment;
 import com.myf.fragment.ToMailFragment;
 import com.myf.listener.HintTwoSelectListener;
+import com.myf.model.UserInfoRespones;
+import com.myf.okhttp.OkHttpApi;
+import com.myf.util.ActivityManager;
 import com.myf.util.Constant;
+import com.myf.util.InitComm;
+import com.myf.util.LogUtil;
+import com.myf.util.ToastUtil;
 import com.xghls.R;
 import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.AutoRelativeLayout;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
 
 /**
  * 代取代寄界面
@@ -29,6 +40,7 @@ import butterknife.ButterKnife;
 public class GenerationTakeAndToMailActivity extends BaseActivity {
     private static final int TAB_POSITION_DAIQU = 0;//代取
     private static final int TAB_POSITION_DAIJI = 1; //代寄
+    private static final String TAG = GenerationTakeAndToMailActivity.class.getSimpleName();
     @Bind(R.id.iv_back)
     AutoLinearLayout mIvBack;
     @Bind(R.id.tv_title)
@@ -62,7 +74,7 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
     private ToMailFragment mToMailFragment;//代寄
     private int mCurrentTabPosition = -1;//当前所在界面的标记
     private int mTargetTabPosition = TAB_POSITION_DAIQU;
-
+    private UserInfoRespones mUserInfoRespones;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,18 +82,24 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
         ButterKnife.bind(this);
         //注册需要的广播
         registerReceivers();
+        ActivityManager.getInstance().addActivity(GenerationTakeAndToMailActivity.this);
         initView();
         initData();
         initEvent();
     }
+    public static void actionStart(Context context){
+        Intent intent = new Intent();
+        intent.setClass(context,GenerationTakeAndToMailActivity.class);
+        context.startActivity(intent);
+    }
 
     private void initEvent() {
-        //设置按钮
-        //设置
+        //个人中心按钮
+        //个人中心
         mLlSetUpThe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GenerationTakeAndToMailActivity.this,SetUpTheActivity.class);
+                Intent intent = new Intent(GenerationTakeAndToMailActivity.this,PersonalCenterActivity.class);
                 startActivity(intent);
             }
         });
@@ -102,7 +120,8 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
     }
 
     private void initData() {
-
+        showLoadingDialog(GenerationTakeAndToMailActivity.this,true);
+        getUserInfo();
     }
 
     private void initView() {
@@ -253,5 +272,39 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
 
             }
         });
+    }
+
+    /**
+     * 骑手端员工信息
+     */
+    private void getUserInfo(){
+        OkHttpApi.getInstance().getUserInfoRespones(InitComm.init().userToken, new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                closeLoadingDialog();
+                ToastUtil.showToast(GenerationTakeAndToMailActivity.this,"联网错误",Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                closeLoadingDialog();
+                LogUtil.e(TAG,response);
+                Gson gson = new Gson();
+                mUserInfoRespones = gson.fromJson(response,UserInfoRespones.class);
+                if (mUserInfoRespones != null){
+                    if (mUserInfoRespones.code.equals("1")) {
+                        mTvTitle.setText(mUserInfoRespones.data.schoolName);
+                        mTvToTakePartName.setText(mUserInfoRespones.data.userName);
+                        Bundle sendBundle = new Bundle();
+                        sendBundle.putSerializable("mUserInfoRespones",mUserInfoRespones);
+                        mGenerationTakeFragment.setArguments(sendBundle);
+                    }else {
+                        ToastUtil.showToast(GenerationTakeAndToMailActivity.this,mUserInfoRespones.msg,Toast.LENGTH_SHORT);
+                    }
+                }else {
+                    ToastUtil.showToast(GenerationTakeAndToMailActivity.this,"解析失败",Toast.LENGTH_SHORT);
+                }
+            }
+        },TAG);
     }
 }

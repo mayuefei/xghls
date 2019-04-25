@@ -1,8 +1,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@mipmap/login_button" android:state_pressed="true"></item>
-    <item android:drawable="@mipmap/login_button_press" android:state_focused="true"></item>
-    <item android:drawable="@mipmap/login_button_press"></item>
+    <item android:drawable="@mipmap/user_tuichudengluq" android:state_pressed="true"></item>
+    <item android:drawable="@mipmap/user_tuichudenglu" android:state_focused="true"></item>
+    <item android:drawable="@mipmap/user_tuichudenglu"></item>
 
 </selector>
 
