@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +31,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Call;
 
 /**
@@ -73,8 +73,8 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
     private GenerationTakeFragment mGenerationTakeFragment;//代取
     private ToMailFragment mToMailFragment;//代寄
     private int mCurrentTabPosition = -1;//当前所在界面的标记
-    private int mTargetTabPosition = TAB_POSITION_DAIQU;
     private UserInfoRespones mUserInfoRespones;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,42 +85,20 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
         ActivityManager.getInstance().addActivity(GenerationTakeAndToMailActivity.this);
         initView();
         initData();
-        initEvent();
     }
-    public static void actionStart(Context context){
+
+    public static void actionStart(Context context) {
         Intent intent = new Intent();
-        intent.setClass(context,GenerationTakeAndToMailActivity.class);
+        intent.setClass(context, GenerationTakeAndToMailActivity.class);
         context.startActivity(intent);
     }
 
-    private void initEvent() {
-        //个人中心按钮
-        //个人中心
-        mLlSetUpThe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(GenerationTakeAndToMailActivity.this,PersonalCenterActivity.class);
-                startActivity(intent);
-            }
-        });
-        //代取
-        mRlXgdq.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onTabClick(TAB_POSITION_DAIQU);
-            }
-        });
-        //代寄
-        mRlXgdj.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onTabClick(TAB_POSITION_DAIJI);
-            }
-        });
+    private void initData() {
+        showLoadingDialog(GenerationTakeAndToMailActivity.this, true);
+        refreshData();
     }
 
-    private void initData() {
-        showLoadingDialog(GenerationTakeAndToMailActivity.this,true);
+    private void refreshData() {
         getUserInfo();
     }
 
@@ -130,13 +108,13 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
         mRlTitleBg.setBackgroundColor(Color.parseColor("#fe8cab"));
         mTvTitle.setText("山西传媒学院");
         //根据mTargetTabPosition的值显示不同的界面
-        onTabClick(mTargetTabPosition);
+        onTabClick(TAB_POSITION_DAIQU);
     }
 
     /**
      * 根据mTargetTabPostion的值显示不同的界面
      *
-     * @param tabPosition
+     * @param tabPosition 标签
      */
     private void onTabClick(int tabPosition) {
         if (mCurrentTabPosition == tabPosition) {
@@ -152,7 +130,7 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
     /**
      * 切换底部按钮样式
      *
-     * @param tabPosition
+     * @param tabPosition 标签
      */
     private void changeTabState(int tabPosition) {
         clearAllTabState();
@@ -185,7 +163,7 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
     /**
      * 切换显示的Fragment
      *
-     * @param tabPosition
+     * @param tabPosition 标签
      */
     private void changeFragment(int tabPosition) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -216,7 +194,7 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
     /**
      * 隐藏所有fragment
      *
-     * @param transaction
+     * @param transaction 标签
      */
     private void hideFragment(FragmentTransaction transaction) {
         if (mGenerationTakeFragment != null) {
@@ -237,13 +215,28 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mLoginStateChangeReceiver, loginStateChangeFilter);
     }
 
+    @OnClick({R.id.ll_set_up_the, R.id.rl_xgdq, R.id.rl_xgdj})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.ll_set_up_the://个人中心
+                Intent intent = new Intent(GenerationTakeAndToMailActivity.this, PersonalCenterActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.rl_xgdq://代取
+                onTabClick(TAB_POSITION_DAIQU);
+                break;
+            case R.id.rl_xgdj://代寄
+                onTabClick(TAB_POSITION_DAIJI);
+                break;
+        }
+    }
+
     /**
      * 登陆广播类
      */
     private class LoginStateChangeReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //每次登陆后判断是否绑定芯盾
             if (mGenerationTakeFragment != null) {
                 mGenerationTakeFragment.refresh();
             }
@@ -277,34 +270,34 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
     /**
      * 骑手端员工信息
      */
-    private void getUserInfo(){
+    private void getUserInfo() {
         OkHttpApi.getInstance().getUserInfoRespones(InitComm.init().userToken, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 closeLoadingDialog();
-                ToastUtil.showToast(GenerationTakeAndToMailActivity.this,"联网错误",Toast.LENGTH_SHORT);
+                ToastUtil.showToast(GenerationTakeAndToMailActivity.this, getString(R.string.netError), Toast.LENGTH_SHORT);
             }
 
             @Override
             public void onResponse(String response, int id) {
                 closeLoadingDialog();
-                LogUtil.e(TAG,response);
+                LogUtil.e(TAG, response);
                 Gson gson = new Gson();
-                mUserInfoRespones = gson.fromJson(response,UserInfoRespones.class);
-                if (mUserInfoRespones != null){
+                mUserInfoRespones = gson.fromJson(response, UserInfoRespones.class);
+                if (mUserInfoRespones != null) {
                     if (mUserInfoRespones.code.equals("1")) {
                         mTvTitle.setText(mUserInfoRespones.data.schoolName);
                         mTvToTakePartName.setText(mUserInfoRespones.data.userName);
                         Bundle sendBundle = new Bundle();
-                        sendBundle.putSerializable("mUserInfoRespones",mUserInfoRespones);
+                        sendBundle.putSerializable("mUserInfoRespones", mUserInfoRespones);
                         mGenerationTakeFragment.setArguments(sendBundle);
-                    }else {
-                        ToastUtil.showToast(GenerationTakeAndToMailActivity.this,mUserInfoRespones.msg,Toast.LENGTH_SHORT);
+                    } else {
+                        ToastUtil.showToast(GenerationTakeAndToMailActivity.this, mUserInfoRespones.msg, Toast.LENGTH_SHORT);
                     }
-                }else {
-                    ToastUtil.showToast(GenerationTakeAndToMailActivity.this,"解析失败",Toast.LENGTH_SHORT);
+                } else {
+                    ToastUtil.showToast(GenerationTakeAndToMailActivity.this, "解析失败", Toast.LENGTH_SHORT);
                 }
             }
-        },TAG);
+        }, TAG);
     }
 }

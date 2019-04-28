@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +25,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import okhttp3.Call;
 
@@ -48,6 +48,9 @@ public class LoginActivity extends BaseActivity {
 
     public static final String PREF_ROLE_ACCOUNT_KEY = "PREF_ROLE_ACCOUNT_KEY";//用户账号
     public static final String PREF_ROLE_PASSWORD_KEY = "PREF_ROLE_PASSWORD_KEY";//用户密码
+    private String mUserName;
+    private String mPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,18 +59,17 @@ public class LoginActivity extends BaseActivity {
         JPushInterface.init(getApplicationContext());
         ActivityManager.getInstance().addActivity(LoginActivity.this);
         initView();
-        initData();
-        initEvent();
     }
-    public static void actionStart(Context context){
+
+    public static void actionStart(Context context) {
         Intent intent = new Intent();
-        intent.setClass(context,LoginActivity.class);
+        intent.setClass(context, LoginActivity.class);
         context.startActivity(intent);
     }
 
     private void initView() {
-        String account = (String) SharedPreferencesUtil.getSharedPreferences(LoginActivity.this,PREF_ROLE_ACCOUNT_KEY,"");
-        if (!TextUtils.isEmpty(account)){
+        String account = (String) SharedPreferencesUtil.getSharedPreferences(LoginActivity.this, PREF_ROLE_ACCOUNT_KEY, "");
+        if (!TextUtils.isEmpty(account)) {
             mEtLoginUsername.setText(account);
             mEtLoginPassword.setFocusable(true);
             mEtLoginPassword.setFocusableInTouchMode(true);
@@ -80,68 +82,65 @@ public class LoginActivity extends BaseActivity {
         mTvTitle.setText("登录");
     }
 
-    private void initData() {
-
-    }
-
-    private void initEvent() {
-        //登录按钮
-        mBtnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (TextUtils.isEmpty(mEtLoginUsername.getText().toString().trim())) {
-                    ToastUtil.showToast(LoginActivity.this,"请输入您的账号",Toast.LENGTH_SHORT);
-                    return;
-                }
-                if (TextUtils.isEmpty(mEtLoginPassword.getText().toString().trim())) {
-                    ToastUtil.showToast(LoginActivity.this,"请输入您的密码",Toast.LENGTH_SHORT);
-                    return;
-                }
-                if (mEtLoginPassword.getText().toString().trim().length() < 6){
-                    ToastUtil.showToast(LoginActivity.this,"请输入正确的密码",Toast.LENGTH_SHORT);
-                    return;
-                }
-                showLoadingDialog(LoginActivity.this,true);
-                goLogin(mEtLoginUsername.getText().toString().trim(),mEtLoginPassword.getText().toString().trim());
-            }
-        });
-    }
     /**
      * 执行登录
      */
-    private LoginRespones mLoginRespones;
-    private void goLogin(String username,String password){
-        OkHttpApi.getInstance().getLoginRespones(username, password, "android", new StringCallback() {
+    private void goLogin(String username, String password) {
+        OkHttpApi.getInstance().getLoginRespones(username, password, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 closeLoadingDialog();
-                ToastUtil.showToast(LoginActivity.this,"联网错误",Toast.LENGTH_SHORT);
+                ToastUtil.showToast(LoginActivity.this, getString(R.string.netError), Toast.LENGTH_SHORT);
             }
 
             @Override
             public void onResponse(String response, int id) {
                 closeLoadingDialog();
-                LogUtil.e(TAG,response);
+                LogUtil.e(TAG, response);
                 Gson gson = new Gson();
-                mLoginRespones = gson.fromJson(response,LoginRespones.class);
-                if (mLoginRespones != null){
-                    if (mLoginRespones.code.equals("1")){
+                LoginRespones mLoginRespones = gson.fromJson(response, LoginRespones.class);
+                if (mLoginRespones != null) {
+                    if (mLoginRespones.code.equals("1")) {
                         //登录成功
                         UserUtil.loginIn(mLoginRespones);
                         //保存账户名称
-                        SharedPreferencesUtil.putSharedPreferences(LoginActivity.this,PREF_ROLE_ACCOUNT_KEY,mEtLoginUsername.getText().toString().trim());
+                        SharedPreferencesUtil.putSharedPreferences(LoginActivity.this, PREF_ROLE_ACCOUNT_KEY, mUserName);
                         //保存账户密码
-                        SharedPreferencesUtil.putSharedPreferences(LoginActivity.this,PREF_ROLE_PASSWORD_KEY,mEtLoginPassword.getText().toString().trim());
+                        SharedPreferencesUtil.putSharedPreferences(LoginActivity.this, PREF_ROLE_PASSWORD_KEY, mPassword);
                         //跳转主页
                         GenerationTakeAndToMailActivity.actionStart(LoginActivity.this);
                         finish();
-                    }else {
-                        ToastUtil.showToast(LoginActivity.this,mLoginRespones.msg,Toast.LENGTH_SHORT);
+                    } else {
+                        ToastUtil.showToast(LoginActivity.this, mLoginRespones.msg, Toast.LENGTH_SHORT);
                     }
-                }else {
-                    ToastUtil.showToast(LoginActivity.this,"解析失败",Toast.LENGTH_SHORT);
+                } else {
+                    ToastUtil.showToast(LoginActivity.this, "解析失败", Toast.LENGTH_SHORT);
                 }
             }
-        },TAG);
+        }, TAG);
+    }
+
+    @OnClick({R.id.btn_login})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_login:
+                mUserName = mEtLoginUsername.getText().toString().trim();
+                mPassword = mEtLoginPassword.getText().toString().trim();
+                if (TextUtils.isEmpty(mUserName)) {
+                    ToastUtil.showToast(LoginActivity.this, "请输入您的账号", Toast.LENGTH_SHORT);
+                    return;
+                }
+                if (TextUtils.isEmpty(mPassword)) {
+                    ToastUtil.showToast(LoginActivity.this, "请输入您的密码", Toast.LENGTH_SHORT);
+                    return;
+                }
+                if (mPassword.length() < 6) {
+                    ToastUtil.showToast(LoginActivity.this, "请输入正确的密码", Toast.LENGTH_SHORT);
+                    return;
+                }
+                showLoadingDialog(LoginActivity.this, true);
+                goLogin(mUserName, mPassword);
+                break;
+        }
     }
 }

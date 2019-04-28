@@ -29,13 +29,6 @@ public class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         topH = getTitleTop();
     }
-
-    /**
-     * 创建绑定控件id
-     *
-     * @param view
-     * @param savedInstanceState
-     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

@@ -109,11 +109,11 @@ public class SplashActivity extends BaseActivity {
      */
     private LoginRespones mLoginRespones;
     private void goLogin(String username,String password){
-        OkHttpApi.getInstance().getLoginRespones(username, password, "android", new StringCallback() {
+        OkHttpApi.getInstance().getLoginRespones(username, password,  new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 closeLoadingDialog();
-                ToastUtil.showToast(SplashActivity.this,"联网错误",Toast.LENGTH_SHORT);
+                ToastUtil.showToast(SplashActivity.this,getString(R.string.netError),Toast.LENGTH_SHORT);
             }
 
             @Override

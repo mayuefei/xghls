@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.autolayout.AutoRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_title_bg"
     android:layout_width="match_parent"
     android:layout_height="128px"
     android:background="@mipmap/user_navigationbar"
-    android:id="@+id/rl_title_bg">
+    tools:ignore="all">
+
     <com.zhy.autolayout.AutoRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="40px">
+
         <com.zhy.autolayout.AutoLinearLayout
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
@@ -16,33 +21,38 @@
             android:paddingLeft="24px"
             android:paddingRight="34px"
             android:visibility="gone">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/back"/>
         </com.zhy.autolayout.AutoLinearLayout>
+
         <com.zhy.autolayout.AutoLinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center">
+
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="登录"
-                android:textSize="36px"
-                android:textColor="@color/cffffff"/>
+                android:textColor="@color/cffffff"
+                android:textSize="36px"/>
         </com.zhy.autolayout.AutoLinearLayout>
+
         <com.zhy.autolayout.AutoLinearLayout
             android:id="@+id/ll_set_up_the"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_alignParentRight="true"
-            android:paddingRight="24px"
+            android:gravity="center"
             android:paddingLeft="34px"
+            android:paddingRight="24px"
             android:visibility="gone">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

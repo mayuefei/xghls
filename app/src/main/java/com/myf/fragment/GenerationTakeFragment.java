@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,22 +18,17 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.myf.base.BaseFragment;
 import com.myf.model.UserInfoRespones;
-import com.myf.okhttp.OkHttpApi;
-import com.myf.util.InitComm;
 import com.myf.util.LogUtil;
 import com.myf.util.RefreshListener;
 import com.myf.util.ToastUtil;
 import com.xghls.R;
 import com.zhy.autolayout.AutoLinearLayout;
-import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
-import okhttp3.Call;
 
 /**
  * 代取界面
@@ -102,17 +96,17 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
     private String orderBy2 = "1";
     private String orderBy3 = "1";
     private UserInfoRespones mUserInfoRespones;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Bundle bundle = getArguments();
         if (bundle != null) {
             mUserInfoRespones = (UserInfoRespones) bundle.getSerializable("mUserInfoRespones");
-            LogUtil.e(TAG, "initView: "+mUserInfoRespones );
+            LogUtil.e(TAG, "initView: " + mUserInfoRespones);
         }
-        LogUtil.e(TAG, "initView: "+mUserInfoRespones );
+        LogUtil.e(TAG, "initView: " + mUserInfoRespones);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.generation_take_fragment, null);
-        ButterKnife.bind(this, view);
         return view;
     }
 

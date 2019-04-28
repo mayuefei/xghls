@@ -24,7 +24,7 @@ public interface MyfApi {
      * 登录接口
      */
     public String CARD_URL_LOGIN = COMMON_URL_START + "login";
-    void getLoginRespones(String username,String password,String device_type,StringCallback callback,String tag);
+    void getLoginRespones(String username,String password,StringCallback callback,String tag);
     /**
      * 骑手端员工信息
      */

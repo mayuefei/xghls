@@ -109,16 +109,15 @@ public class OkHttpApi implements MyfApi {
      * 登录接口
      * @param username
      * @param password
-     * @param device_type
      * @param callback
      * @param tag
      */
     @Override
-    public void getLoginRespones(String username, String password, String device_type, StringCallback callback, String tag) {
+    public void getLoginRespones(String username, String password, StringCallback callback, String tag) {
         Map<String,String> params = new HashMap<>();
         params.put("username",username);
         params.put("password",password);
-        params.put("device_type",device_type);
+        params.put("device_type","android");
         asyncGet(CARD_URL_LOGIN,params,callback);
     }
 

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">小哥欢乐送</string>
     <string name="format_retry_send">%dS</string>
+    <string name="netError">联网错误</string>
 </resources>

@@ -62,10 +62,10 @@ public class BaseActivity extends AppCompatActivity {
     // 取状态栏高度，其他方法都无法取到真实的高度
     @SuppressLint("PrivateApi")
     private int getTitleTop() {
-        Class<?> c = null;
-        Object obj = null;
-        Field field = null;
-        int x = 0, sbar = 0;
+        Class<?> c;
+        Object obj;
+        Field field;
+        int x, sbar = 0;
         try {
             c = Class.forName("com.android.internal.R$dimen");
             obj = c.newInstance();
@@ -81,8 +81,8 @@ public class BaseActivity extends AppCompatActivity {
     /**
      * 显示正在加载数据dialog
      *
-     * @param context
-     * @param isBackDismiss
+     * @param context context
+     * @param isBackDismiss 返回消失
      */
     public void showLoadingDialog(Context context, boolean isBackDismiss) {
         if (loadingDialog != null && loadingDialog.isShowing()) {
@@ -110,7 +110,7 @@ public class BaseActivity extends AppCompatActivity {
      */
     public void showHintOne(Context context, String text, final HintOneListener listener) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.alert_dialog_one, null);
+        @SuppressLint("InflateParams") LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.alert_dialog_one, null);
         final Dialog dialog = new AlertDialog.Builder(context).create();
         dialog.setCancelable(false);
         dialog.show();
