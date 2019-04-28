@@ -128,9 +128,6 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
         //设置
         mLlSetUpThe.setVisibility(View.VISIBLE);
         mRlTitleBg.setBackgroundColor(Color.parseColor("#fe8cab"));
-        mTvTitle.setText("山西传媒学院");
-        //根据mTargetTabPosition的值显示不同的界面
-        onTabClick(mTargetTabPosition);
     }
 
     /**
@@ -199,6 +196,9 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
                     mGenerationTakeFragment.refresh();
                     transaction.show(mGenerationTakeFragment);
                 }
+                Bundle sendBundle = new Bundle();
+                sendBundle.putSerializable("mUserInfoRespones",mUserInfoRespones);
+                mGenerationTakeFragment.setArguments(sendBundle);
                 break;
             case TAB_POSITION_DAIJI://代寄
                 if (mToMailFragment == null) {
@@ -295,9 +295,8 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
                     if (mUserInfoRespones.code.equals("1")) {
                         mTvTitle.setText(mUserInfoRespones.data.schoolName);
                         mTvToTakePartName.setText(mUserInfoRespones.data.userName);
-                        Bundle sendBundle = new Bundle();
-                        sendBundle.putSerializable("mUserInfoRespones",mUserInfoRespones);
-                        mGenerationTakeFragment.setArguments(sendBundle);
+                        //根据mTargetTabPosition的值显示不同的界面
+                        onTabClick(mTargetTabPosition);
                     }else {
                         ToastUtil.showToast(GenerationTakeAndToMailActivity.this,mUserInfoRespones.msg,Toast.LENGTH_SHORT);
                     }
