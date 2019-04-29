@@ -7,5 +7,22 @@
         android:id="@+id/iv_courier_company_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/user_baishi"/>
+        android:src="@mipmap/user_baishi"
+        android:visibility="gone"/>
+    <com.zhy.autolayout.AutoLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingBottom="20px"
+        android:paddingTop="20px">
+        <TextView
+            android:id="@+id/tv_courier_company_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="36px"
+            android:text="圆通"
+            android:textStyle="bold"/>
+    </com.zhy.autolayout.AutoLinearLayout>
+
 </com.zhy.autolayout.AutoLinearLayout>

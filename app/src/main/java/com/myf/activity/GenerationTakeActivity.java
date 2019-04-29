@@ -110,15 +110,15 @@ public class GenerationTakeActivity extends BaseActivity {
         list.add(R.mipmap.user_yunda);
         list.add(R.mipmap.user_zhongtong);
         final String[] name = {"百世汇通","京东","快捷快递","全峰快递","申通快递","顺丰速运","苏宁易购","天猫","天天快递","圆通速递","韵达快递","中通速递"};
-        CourierCompanyAdapter adapter = new CourierCompanyAdapter(list,GenerationTakeActivity.this);
+//        CourierCompanyAdapter adapter = new CourierCompanyAdapter(list,GenerationTakeActivity.this);
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        alertBuilder.setSingleChoiceItems(adapter, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                mEtChooseCourierCompany.setText(name[i]);
-                chooseExpressCompanyAlertDialog.dismiss();
-            }
-        });
+//        alertBuilder.setSingleChoiceItems(adapter, 0, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                mEtChooseCourierCompany.setText(name[i]);
+//                chooseExpressCompanyAlertDialog.dismiss();
+//            }
+//        });
         chooseExpressCompanyAlertDialog = alertBuilder.create();
         chooseExpressCompanyAlertDialog.show();
     }

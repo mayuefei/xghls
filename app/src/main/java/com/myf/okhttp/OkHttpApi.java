@@ -134,6 +134,37 @@ public class OkHttpApi implements MyfApi {
         asyncGet(CARD_USER_INFO,params,callback);
     }
 
+    /**
+     * 代取订单列表接口
+     * @param token 判断员工唯一值
+     * @param role_id 员工角色ID
+     * @param express_time_type 取件时间类型
+     * @param status    订单状态
+     * @param express_id    快递公司ID
+     * @param start_time    开始时间
+     * @param end_time  结束时间
+     * @param keyword   关键字
+     * @param dorm_order    宿舍排序
+     * @param pay_order     宿舍排序
+     * @param status_order  宿舍排序
+     */
+    @Override
+    public void getExpressListsRespones(String token, String role_id,String express_time_type, String status, String express_id, String start_time, String end_time, String keyword, String dorm_order, String pay_order, String status_order,StringCallback callback,String tag) {
+        Map<String,String> params= new HashMap<>();
+        params.put("token",token);
+        params.put("role_id",role_id);
+        params.put("express_time_type",express_time_type);
+        params.put("status",status);
+        params.put("express_id",express_id);
+        params.put("start_time",start_time);
+        params.put("end_time",end_time);
+        params.put("keyword",keyword);
+        params.put("dorm_order",dorm_order);
+        params.put("pay_order",pay_order);
+        params.put("status_order",status_order);
+        asyncGet(CARD_EXPRESS_LISTS,params,callback);
+    }
+
     @Override
     public void getVerifyImageRespones(String logonId, StringCallback callback, String tag) {
         Map<String, String> params = new HashMap<>();

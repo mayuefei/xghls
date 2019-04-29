@@ -18,17 +18,26 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.myf.adapter.CourierCompanyAdapter;
 import com.myf.base.BaseFragment;
+import com.myf.model.ExpressListsRespones;
 import com.myf.model.UserInfoRespones;
+import com.myf.okhttp.OkHttpApi;
+import com.myf.util.InitComm;
 import com.myf.util.LogUtil;
 import com.myf.util.RefreshListener;
 import com.myf.util.ToastUtil;
 import com.xghls.R;
 import com.zhy.autolayout.AutoLinearLayout;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import okhttp3.Call;
 
 /**
  * 代取界面
@@ -96,16 +105,21 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
     private String orderBy2 = "1";
     private String orderBy3 = "1";
     private UserInfoRespones mUserInfoRespones;
-
+    private ArrayList<UserInfoRespones.DataBean.ExpressDataBean> list;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Bundle bundle = getArguments();
         if (bundle != null) {
             mUserInfoRespones = (UserInfoRespones) bundle.getSerializable("mUserInfoRespones");
-            LogUtil.e(TAG, "initView: " + mUserInfoRespones);
+            LogUtil.e(TAG,mUserInfoRespones+"");
+            list = new ArrayList<>();
+            list.clear();
+            for (UserInfoRespones.DataBean.ExpressDataBean bean: mUserInfoRespones.data.expressData) {
+                list.add(bean);
+            }
+            LogUtil.e(TAG,list+"");
         }
-        LogUtil.e(TAG, "initView: " + mUserInfoRespones);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.generation_take_fragment, null);
         return view;
     }
@@ -134,7 +148,8 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
     }
 
     private void initData() {
-
+//        showLoadingDialog(getActivity(),true);
+//        getExpressLists("","","","","","","");
     }
 
     private void initEvent() {
@@ -307,20 +322,47 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
      * 选择快递公司弹出框
      */
     private AlertDialog chooseExpressCompanyAlertDialog; //单选框
-
     //学校Dialog列表
     public void showTheDeliveryTimeADialog(View view) {
-        final String[] items = {"圆通速递", "百世汇通", "申通快递", "中通快递", "韵达速递", "天天快递", "顺丰速运", "京东", "苏宁易购", "唯品会", "天猫", "快捷快递", "邮政", "全峰快递", "建华快递", "当当网"};
+//        final String[] items = {"圆通速递", "百世汇通", "申通快递", "中通快递", "韵达速递", "天天快递", "顺丰速运", "京东", "苏宁易购", "唯品会", "天猫", "快捷快递", "邮政", "全峰快递", "建华快递", "当当网"};
+        CourierCompanyAdapter adapter = new CourierCompanyAdapter(list,getActivity());
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
-        alertBuilder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+        alertBuilder.setSingleChoiceItems(adapter, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mEtPleaseSelect.setText(items[i]);
+                mEtPleaseSelect.setText(list.get(i).express_name);
                 chooseExpressCompanyAlertDialog.dismiss();
             }
         });
         chooseExpressCompanyAlertDialog = alertBuilder.create();
         chooseExpressCompanyAlertDialog.show();
+    }
+
+    /**
+     * 代取订单列表接口
+     */
+    private ExpressListsRespones mExpressListsRespones;
+    private void getExpressLists(String expressTimeType,String status,String expressId,String keyword,String dormOrder,String payOrder,String statusOrder){
+        OkHttpApi.getInstance().getExpressListsRespones(InitComm.init().userToken, InitComm.init().userRoleId, expressTimeType, status, expressId, "", "", keyword, dormOrder, payOrder, statusOrder, new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                closeLoadingDialog();
+                ToastUtil.showToast(getActivity(),"联网错误",Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                closeLoadingDialog();
+                LogUtil.e(TAG,response);
+                Gson gson = new Gson();
+                mExpressListsRespones = gson.fromJson(response,ExpressListsRespones.class);
+                if (mExpressListsRespones != null) {
+
+                }else {
+                    ToastUtil.showToast(getActivity(),"错误信息",Toast.LENGTH_SHORT);
+                }
+            }
+        },TAG);
     }
 
     @Override

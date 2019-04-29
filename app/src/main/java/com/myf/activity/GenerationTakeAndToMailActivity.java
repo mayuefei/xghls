@@ -177,6 +177,9 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
                     mGenerationTakeFragment.refresh();
                     transaction.show(mGenerationTakeFragment);
                 }
+                Bundle sendBundle = new Bundle();
+                sendBundle.putSerializable("mUserInfoRespones",mUserInfoRespones);
+                mGenerationTakeFragment.setArguments(sendBundle);
                 break;
             case TAB_POSITION_DAIJI://代寄
                 if (mToMailFragment == null) {

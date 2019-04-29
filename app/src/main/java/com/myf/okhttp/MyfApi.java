@@ -12,9 +12,10 @@ public interface MyfApi {
 //    public String ADD_STRING = "mobileServer/"; // 附加串
 //    public String COMMON_URL_START = COMMON_IP + ":" + COM_PORT + "/" + ADD_STRING; // 拼接地址
 
-    public String COMMON_IP = "http://192.168.5.122"; // 李阳本地服务
-    public String ADD_STRING = "admin/mobile"; // 附加串
-    public String COMMON_URL_START = COMMON_IP + "/api/" + ADD_STRING + "/"; // 拼接地址
+//    public String COMMON_IP = "http://192.168.5.122"; // 李阳本地服务
+    public String COMMON_IP = "http://www.wevox.cn";// 生产地址
+    public String ADD_STRING = "admin/mobile/"; // 附加串
+    public String COMMON_URL_START = COMMON_IP + "/api/" + ADD_STRING; // 拼接地址
     /**
      * 刷新EMP_SID 登录之前调用
      */
@@ -30,5 +31,10 @@ public interface MyfApi {
      */
     public String CARD_USER_INFO = COMMON_URL_START + "user_info";
     void getUserInfoRespones(String token,StringCallback callback,String tag);
+    /**
+     * 代取订单列表接口
+     */
+    public String CARD_EXPRESS_LISTS = COMMON_URL_START + "express_lists";
+    void getExpressListsRespones(String token,String role_id,String express_time_type,String status,String express_id,String start_time,String end_time,String keyword,String dorm_order,String pay_order,String status_order,StringCallback callback,String tag);
 }
 
