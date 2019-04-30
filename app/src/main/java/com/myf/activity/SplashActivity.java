@@ -65,7 +65,7 @@ public class SplashActivity extends BaseActivity {
                         if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(password)){
                             showLoadingDialog(SplashActivity.this,true);
                             goLogin(account,password);
-                            finish();
+
                         }else {
                             //否则进入登录界面
                             LoginActivity.actionStart(SplashActivity.this);

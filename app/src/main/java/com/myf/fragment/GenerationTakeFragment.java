@@ -1,5 +1,6 @@
 package com.myf.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ import okhttp3.Call;
 /**
  * 代取界面
  */
+@SuppressLint("ValidFragment")
 public class GenerationTakeFragment extends BaseFragment implements RefreshListener {
     private static final String TAG = "GenerationTakeFragment";
     @Bind(R.id.rb_forenoon_single)
@@ -105,21 +107,15 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
     private String orderBy2 = "1";
     private String orderBy3 = "1";
     private UserInfoRespones mUserInfoRespones;
-    private ArrayList<UserInfoRespones.DataBean.ExpressDataBean> list;
+    private ArrayList<UserInfoRespones.DataBean.ExpressDataBean> list = new ArrayList<>();
+
+    public GenerationTakeFragment(UserInfoRespones userInfoRespones) {
+        mUserInfoRespones = userInfoRespones;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            mUserInfoRespones = (UserInfoRespones) bundle.getSerializable("mUserInfoRespones");
-            LogUtil.e(TAG,mUserInfoRespones+"");
-            list = new ArrayList<>();
-            list.clear();
-            for (UserInfoRespones.DataBean.ExpressDataBean bean: mUserInfoRespones.data.expressData) {
-                list.add(bean);
-            }
-            LogUtil.e(TAG,list+"");
-        }
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.generation_take_fragment, null);
         return view;
     }
@@ -133,6 +129,8 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
     }
 
     private void initView() {
+        list.clear();
+        list.addAll(mUserInfoRespones.data.expressData);
 //        //默认上午单
 //        mRbForenoonSingle.setChecked(true);
 //        mRbForenoonSingle.setTextColor(Color.parseColor("#ffffff"));
@@ -322,10 +320,11 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
      * 选择快递公司弹出框
      */
     private AlertDialog chooseExpressCompanyAlertDialog; //单选框
+
     //学校Dialog列表
     public void showTheDeliveryTimeADialog(View view) {
 //        final String[] items = {"圆通速递", "百世汇通", "申通快递", "中通快递", "韵达速递", "天天快递", "顺丰速运", "京东", "苏宁易购", "唯品会", "天猫", "快捷快递", "邮政", "全峰快递", "建华快递", "当当网"};
-        CourierCompanyAdapter adapter = new CourierCompanyAdapter(list,getActivity());
+        CourierCompanyAdapter adapter = new CourierCompanyAdapter(list, getActivity());
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
         alertBuilder.setSingleChoiceItems(adapter, 0, new DialogInterface.OnClickListener() {
             @Override
@@ -342,27 +341,28 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
      * 代取订单列表接口
      */
     private ExpressListsRespones mExpressListsRespones;
-    private void getExpressLists(String expressTimeType,String status,String expressId,String keyword,String dormOrder,String payOrder,String statusOrder){
+
+    private void getExpressLists(String expressTimeType, String status, String expressId, String keyword, String dormOrder, String payOrder, String statusOrder) {
         OkHttpApi.getInstance().getExpressListsRespones(InitComm.init().userToken, InitComm.init().userRoleId, expressTimeType, status, expressId, "", "", keyword, dormOrder, payOrder, statusOrder, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 closeLoadingDialog();
-                ToastUtil.showToast(getActivity(),"联网错误",Toast.LENGTH_SHORT);
+                ToastUtil.showToast(getActivity(), "联网错误", Toast.LENGTH_SHORT);
             }
 
             @Override
             public void onResponse(String response, int id) {
                 closeLoadingDialog();
-                LogUtil.e(TAG,response);
+                LogUtil.e(TAG, response);
                 Gson gson = new Gson();
-                mExpressListsRespones = gson.fromJson(response,ExpressListsRespones.class);
+                mExpressListsRespones = gson.fromJson(response, ExpressListsRespones.class);
                 if (mExpressListsRespones != null) {
 
-                }else {
-                    ToastUtil.showToast(getActivity(),"错误信息",Toast.LENGTH_SHORT);
+                } else {
+                    ToastUtil.showToast(getActivity(), "错误信息", Toast.LENGTH_SHORT);
                 }
             }
-        },TAG);
+        }, TAG);
     }
 
     @Override

@@ -107,8 +107,7 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
         mLlSetUpThe.setVisibility(View.VISIBLE);
         mRlTitleBg.setBackgroundColor(Color.parseColor("#fe8cab"));
         mTvTitle.setText("山西传媒学院");
-        //根据mTargetTabPosition的值显示不同的界面
-        onTabClick(TAB_POSITION_DAIQU);
+
     }
 
     /**
@@ -171,19 +170,16 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
         switch (tabPosition) {
             case TAB_POSITION_DAIQU://代取
                 if (mGenerationTakeFragment == null) {
-                    mGenerationTakeFragment = new GenerationTakeFragment();
+                    mGenerationTakeFragment = new GenerationTakeFragment(mUserInfoRespones);
                     transaction.add(R.id.rl_container, mGenerationTakeFragment);
                 } else {
                     mGenerationTakeFragment.refresh();
                     transaction.show(mGenerationTakeFragment);
                 }
-                Bundle sendBundle = new Bundle();
-                sendBundle.putSerializable("mUserInfoRespones",mUserInfoRespones);
-                mGenerationTakeFragment.setArguments(sendBundle);
                 break;
             case TAB_POSITION_DAIJI://代寄
                 if (mToMailFragment == null) {
-                    mToMailFragment = new ToMailFragment();
+                    mToMailFragment = new ToMailFragment(mUserInfoRespones);
                     transaction.add(R.id.rl_container, mToMailFragment);
                 } else {
                     mToMailFragment.refresh();
@@ -291,9 +287,8 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
                     if (mUserInfoRespones.code.equals("1")) {
                         mTvTitle.setText(mUserInfoRespones.data.schoolName);
                         mTvToTakePartName.setText(mUserInfoRespones.data.userName);
-                        Bundle sendBundle = new Bundle();
-                        sendBundle.putSerializable("mUserInfoRespones", mUserInfoRespones);
-                        mGenerationTakeFragment.setArguments(sendBundle);
+                        //根据mTargetTabPosition的值显示不同的界面
+                        onTabClick(TAB_POSITION_DAIQU);
                     } else {
                         ToastUtil.showToast(GenerationTakeAndToMailActivity.this, mUserInfoRespones.msg, Toast.LENGTH_SHORT);
                     }
