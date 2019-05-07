@@ -138,15 +138,15 @@ public class OkHttpApi implements MyfApi {
      * 代取订单列表接口
      * @param token 判断员工唯一值
      * @param role_id 员工角色ID
-     * @param express_time_type 取件时间类型
+     * @param express_time_type 取件时间类型 1上午2下午
      * @param status    订单状态
      * @param express_id    快递公司ID
      * @param start_time    开始时间
      * @param end_time  结束时间
      * @param keyword   关键字
      * @param dorm_order    宿舍排序
-     * @param pay_order     宿舍排序
-     * @param status_order  宿舍排序
+     * @param pay_order     支付时间排序
+     * @param status_order  状态排序
      */
     @Override
     public void getExpressListsRespones(String token, String role_id,String express_time_type, String status, String express_id, String start_time, String end_time, String keyword, String dorm_order, String pay_order, String status_order,StringCallback callback,String tag) {
@@ -162,7 +162,7 @@ public class OkHttpApi implements MyfApi {
         params.put("dorm_order",dorm_order);
         params.put("pay_order",pay_order);
         params.put("status_order",status_order);
-        asyncGet(CARD_EXPRESS_LISTS,params,callback);
+        asyncGet(CARD_ORDER_LISTS,params,callback);
     }
 
     @Override

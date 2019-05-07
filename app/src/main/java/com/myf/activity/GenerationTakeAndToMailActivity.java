@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +75,7 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
     private ToMailFragment mToMailFragment;//代寄
     private int mCurrentTabPosition = -1;//当前所在界面的标记
     private UserInfoRespones mUserInfoRespones;
+    private String mToTakePartName;//取件员名字
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,8 +220,9 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_set_up_the://个人中心
-                Intent intent = new Intent(GenerationTakeAndToMailActivity.this, PersonalCenterActivity.class);
-                startActivity(intent);
+                if (!TextUtils.isEmpty(mToTakePartName)){
+                    PersonalCenterActivity.actionStart(GenerationTakeAndToMailActivity.this,mToTakePartName);
+                }
                 break;
             case R.id.rl_xgdq://代取
                 onTabClick(TAB_POSITION_DAIQU);
@@ -287,6 +290,7 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
                     if (mUserInfoRespones.code.equals("1")) {
                         mTvTitle.setText(mUserInfoRespones.data.schoolName);
                         mTvToTakePartName.setText(mUserInfoRespones.data.userName);
+                        mToTakePartName = mUserInfoRespones.data.userName;//取件员名字给个人中心界面传
                         //根据mTargetTabPosition的值显示不同的界面
                         onTabClick(TAB_POSITION_DAIQU);
                     } else {

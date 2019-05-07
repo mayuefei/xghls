@@ -1,7 +1,10 @@
 package com.myf.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -43,7 +46,8 @@ public class PersonalCenterActivity extends BaseActivity {
     TextView mTvToTakePartName;
     @Bind(R.id.ll_statistical)
     AutoLinearLayout mLlStatistical;
-
+    private static final String TOTAKEPARTNAME = "ToTakePartName";
+    private String mToTakePartName;
     //提醒标记
     private boolean remindTag = false;
     //退出程序标记
@@ -54,10 +58,30 @@ public class PersonalCenterActivity extends BaseActivity {
         setContentView(R.layout.activity_personal_center);
         ButterKnife.bind(this);
         ActivityManager.getInstance().addActivity(PersonalCenterActivity.this);
+        if (!getIntentDate()){
+            finish();
+            return;
+        }
         initView();
         initDada();
         initEvent();
 
+    }
+    public static void actionStart(Context context,String toTakePartName) {
+        Intent intent = new Intent(context,PersonalCenterActivity.class);
+        intent.putExtra(TOTAKEPARTNAME,toTakePartName);
+        context.startActivity(intent);
+    }
+    //传值成功
+    public boolean getIntentDate(){
+        Intent intent = getIntent();
+        if (intent == null) {
+            return false;
+        }
+        if (intent != null){
+            mToTakePartName = intent.getStringExtra(TOTAKEPARTNAME);
+        }
+        return !TextUtils.isEmpty(mToTakePartName);
     }
 
     private void initView() {
@@ -72,6 +96,7 @@ public class PersonalCenterActivity extends BaseActivity {
         mTvTitle.setText("个人中心");
         mTvTitle.setTextColor(Color.parseColor("#ffffff"));
         mRlTitleBg.setBackgroundColor(Color.parseColor("#fe8cab"));
+        mTvToTakePartName.setText(mToTakePartName);
     }
 
     private void initDada() {

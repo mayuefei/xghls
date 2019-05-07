@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -21,23 +22,28 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.myf.adapter.CourierCompanyAdapter;
+import com.myf.adapter.TheOrderListAdapter;
 import com.myf.base.BaseFragment;
-import com.myf.model.ExpressListsRespones;
+import com.myf.model.OrderListsRespones;
 import com.myf.model.UserInfoRespones;
 import com.myf.okhttp.OkHttpApi;
 import com.myf.util.InitComm;
 import com.myf.util.LogUtil;
 import com.myf.util.RefreshListener;
 import com.myf.util.ToastUtil;
+import com.myf.view.JZBKLoadingHandler;
 import com.xghls.R;
 import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 import okhttp3.Call;
 
 /**
@@ -108,6 +114,8 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
     private String orderBy3 = "1";
     private UserInfoRespones mUserInfoRespones;
     private ArrayList<UserInfoRespones.DataBean.ExpressDataBean> list = new ArrayList<>();
+    private TheOrderListAdapter mTheOrderListAdapter;
+    private List<OrderListsRespones.DataBean> data = new ArrayList<>();
 
     public GenerationTakeFragment(UserInfoRespones userInfoRespones) {
         mUserInfoRespones = userInfoRespones;
@@ -137,20 +145,27 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
 //        mRbForenoonSingle.setTextSize(TypedValue.COMPLEX_UNIT_PX, 36);
 //        mRbForenoonSingle.getPaint().setFakeBoldText(true);
 //        //默认待取件
-//        mTvDqj.setTextColor(Color.parseColor("#fe8cab"));
-//        mTvPickUpNumber.setTextColor(Color.parseColor("#fe8cab"));
+        mTvDqj.setTextColor(Color.parseColor("#fe8cab"));
+        mTvPickUpNumber.setTextColor(Color.parseColor("#fe8cab"));
 //        //默认宿舍楼号正序
 //        mLlOrderList.setBackgroundResource(R.drawable.bg_time_color);
 //        mTvDormitoryBuilding.setTextColor(Color.parseColor("#ffffff"));
 //        mIvDormitoryBuilding.setImageResource(R.mipmap.user_baiseshang);
+        if (mTheOrderListAdapter == null){
+            mTheOrderListAdapter = new TheOrderListAdapter(getActivity(),data);
+        }
+        mLvTheOrderList.setAdapter(mTheOrderListAdapter);
     }
 
     private void initData() {
-//        showLoadingDialog(getActivity(),true);
-//        getExpressLists("","","","","","","");
+        showLoadingDialog(getActivity(),false);
+        getExpressLists("1","1","","","","","");
     }
 
     private void initEvent() {
+        //初始化
+        initPtrFrameLayout();
+
         //当天按钮
         mRgDayList.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -163,6 +178,9 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                         mRbForenoonSingle.setTextColor(Color.parseColor("#ffffff"));
                         mRbForenoonSingle.setTextSize(TypedValue.COMPLEX_UNIT_PX, 36);
                         mRbForenoonSingle.getPaint().setFakeBoldText(true);
+                        mTvDqj.setTextColor(Color.parseColor("#fe8cab"));
+                        mTvPickUpNumber.setTextColor(Color.parseColor("#fe8cab"));
+                        getExpressLists("1","1","","","","","");
                         break;
                     case R.id.rb_afternoon_single://下午单
                         removeStagesTabState();
@@ -171,6 +189,9 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                         mRbAfternoonSingle.setTextColor(Color.parseColor("#ffffff"));
                         mRbAfternoonSingle.setTextSize(TypedValue.COMPLEX_UNIT_PX, 36);
                         mRbAfternoonSingle.getPaint().setFakeBoldText(true);
+                        mTvDqj.setTextColor(Color.parseColor("#fe8cab"));
+                        mTvPickUpNumber.setTextColor(Color.parseColor("#fe8cab"));
+                        getExpressLists("2","1","","","","","");
                         break;
                     case R.id.rb_that_very_day_summarizing://当天汇总
                         removeStagesTabState();
@@ -340,27 +361,42 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
     /**
      * 代取订单列表接口
      */
-    private ExpressListsRespones mExpressListsRespones;
+    private OrderListsRespones mOrderListsRespones;
 
     private void getExpressLists(String expressTimeType, String status, String expressId, String keyword, String dormOrder, String payOrder, String statusOrder) {
         OkHttpApi.getInstance().getExpressListsRespones(InitComm.init().userToken, InitComm.init().userRoleId, expressTimeType, status, expressId, "", "", keyword, dormOrder, payOrder, statusOrder, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
+                //刷新完成
+                mPflFrameLayout.refreshComplete();
                 closeLoadingDialog();
-                ToastUtil.showToast(getActivity(), "联网错误", Toast.LENGTH_SHORT);
+                ToastUtil.showToast(getActivity(),getString(R.string.netError), Toast.LENGTH_SHORT);
             }
 
             @Override
             public void onResponse(String response, int id) {
+                //刷新完成
+                mPflFrameLayout.refreshComplete();
                 closeLoadingDialog();
                 LogUtil.e(TAG, response);
                 Gson gson = new Gson();
-                mExpressListsRespones = gson.fromJson(response, ExpressListsRespones.class);
-                if (mExpressListsRespones != null) {
+                mOrderListsRespones = gson.fromJson(response, OrderListsRespones.class);
+                if (mOrderListsRespones != null) {
+                    if (mOrderListsRespones.code.equals("1")){
+                        data .clear();
+                        if (mOrderListsRespones.data != null && mOrderListsRespones.data.size() > 0){
+                            for (OrderListsRespones.DataBean bean : mOrderListsRespones.data) {
+                                data.add(bean);
+                            }
+                        }
+                    }else {
+                        ToastUtil.showToast(getActivity(),mOrderListsRespones.msg,Toast.LENGTH_SHORT);
+                    }
 
                 } else {
-                    ToastUtil.showToast(getActivity(), "错误信息", Toast.LENGTH_SHORT);
+                    ToastUtil.showToast(getActivity(), "解析失败", Toast.LENGTH_SHORT);
                 }
+                mTheOrderListAdapter.notifyDataSetChanged();
             }
         }, TAG);
     }
@@ -374,5 +410,28 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+    /**
+     * 初始化ptrFrameLayout
+     */
+    private void initPtrFrameLayout(){
+        mPflFrameLayout.addPtrUIHandler(new JZBKLoadingHandler(mPflFrameLayout));
+        mPflFrameLayout.setPtrHandler(new PtrDefaultHandler() {
+            //刷新开始
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //主线程中改变UI，设置数据
+                        refreshData();
+                    }
+                },1000);
+            }
+        });
+    }
+    private void refreshData(){
+        //加载的条目
+        getExpressLists("1","1","","","","","");
     }
 }

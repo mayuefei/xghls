@@ -17,7 +17,7 @@
                 android:id="@+id/iv_to_take_part_head_portrait"
                 android:layout_width="154px"
                 android:layout_height="154px"
-                android:src="@mipmap/ic_launcher"
+                android:src="@mipmap/logo"
                 android:layout_gravity="center"
                 android:layout_marginTop="30px"/>
             <TextView

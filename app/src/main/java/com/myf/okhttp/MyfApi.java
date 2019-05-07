@@ -34,7 +34,7 @@ public interface MyfApi {
     /**
      * 代取订单列表接口
      */
-    public String CARD_EXPRESS_LISTS = COMMON_URL_START + "express_lists";
+    public String CARD_ORDER_LISTS = COMMON_URL_START + "order_lists";
     void getExpressListsRespones(String token,String role_id,String express_time_type,String status,String express_id,String start_time,String end_time,String keyword,String dorm_order,String pay_order,String status_order,StringCallback callback,String tag);
 }
 

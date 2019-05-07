@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
 import com.xghls.R;
 
@@ -13,7 +14,7 @@ import com.xghls.R;
 /**
  * 自动旋转ImageView,加载中。。。显示的那个
  */
-public class RotateImageView extends android.support.v7.widget.AppCompatImageView {
+public class RotateImageView extends ImageView {
     public RotateImageView(Context context) {
         this(context, null);
     }
