@@ -216,7 +216,7 @@
                 android:id="@+id/tv_note_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="门没开放到大爷那去"
+                android:text=""
                 android:textColor="#000000"
                 android:textSize="30px" />
         </com.zhy.autolayout.AutoLinearLayout>

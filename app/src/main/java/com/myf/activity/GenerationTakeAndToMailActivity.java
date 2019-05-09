@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.myf.base.BaseActivity;
+import com.myf.base.BaseFragment;
 import com.myf.fragment.GenerationTakeFragment;
 import com.myf.fragment.ToMailFragment;
 import com.myf.listener.HintTwoSelectListener;
@@ -38,7 +39,7 @@ import okhttp3.Call;
 /**
  * 代取代寄界面
  */
-public class GenerationTakeAndToMailActivity extends BaseActivity {
+public class GenerationTakeAndToMailActivity extends BaseActivity implements BaseFragment.FragmentCallBack {
     private static final int TAB_POSITION_DAIQU = 0;//代取
     private static final int TAB_POSITION_DAIJI = 1; //代寄
     private static final String TAG = GenerationTakeAndToMailActivity.class.getSimpleName();
@@ -230,6 +231,13 @@ public class GenerationTakeAndToMailActivity extends BaseActivity {
             case R.id.rl_xgdj://代寄
                 onTabClick(TAB_POSITION_DAIJI);
                 break;
+        }
+    }
+
+    @Override
+    public void setValue(String expressTypeCount) {
+        if (!TextUtils.isEmpty(expressTypeCount)){
+            mTvDaiquNumber.setText(expressTypeCount);
         }
     }
 

@@ -23,10 +23,10 @@ import butterknife.ButterKnife;
 
 public class TheOrderListAdapter extends BaseAdapter {
     public static final String TAG = TheOrderListAdapter.class.getSimpleName();
-    private List<OrderListsRespones.DataBean> data;
+    private List<OrderListsRespones.DataBean.OrderDataBean> data;
     private LayoutInflater mLayoutInflater;
 
-    public TheOrderListAdapter(Context context, List<OrderListsRespones.DataBean> data) {
+    public TheOrderListAdapter(Context context, List<OrderListsRespones.DataBean.OrderDataBean> data) {
         //实例化布局导入器
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //传递数据源
@@ -114,8 +114,15 @@ public class TheOrderListAdapter extends BaseAdapter {
                     holder.mRlTakeLayout.setVisibility(View.VISIBLE);
                     holder.mBtnTake.setVisibility(View.GONE);
                     holder.mBtnNotToTake.setText("关闭订单");
+                    holder.mBtnNotToTake.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
                 }
             }
+
         }
         return view;
     }

@@ -165,6 +165,23 @@ public class OkHttpApi implements MyfApi {
         asyncGet(CARD_ORDER_LISTS,params,callback);
     }
 
+    /**
+     *
+     * @param token 判断员工唯一值
+     * @param order_id 订单ID
+     * @param status 订单状态
+     * @param callback
+     * @param tag
+     */
+    @Override
+    public void getEditStatusRespones(String token, String order_id, String status, StringCallback callback, String tag) {
+        Map<String,String> params= new HashMap<>();
+        params.put("token",token);
+        params.put("order_id",order_id);
+        params.put("status",status);
+        asyncGet(CARD_EDIT_STATUS,params,callback);
+    }
+
     @Override
     public void getVerifyImageRespones(String logonId, StringCallback callback, String tag) {
         Map<String, String> params = new HashMap<>();

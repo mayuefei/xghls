@@ -35,7 +35,7 @@ public class UserInfoRespones implements Serializable {
              */
 
             public String express_name;
-            public int id;
+            public String id;
         }
     }
 }

@@ -36,5 +36,10 @@ public interface MyfApi {
      */
     public String CARD_ORDER_LISTS = COMMON_URL_START + "order_lists";
     void getExpressListsRespones(String token,String role_id,String express_time_type,String status,String express_id,String start_time,String end_time,String keyword,String dorm_order,String pay_order,String status_order,StringCallback callback,String tag);
+    /**
+     * 代取订单更改状态接口
+     */
+    public String CARD_EDIT_STATUS = COMMON_URL_START + "edit_status";
+    void getEditStatusRespones(String token,String order_id,String status,StringCallback callback,String tag);
 }
 

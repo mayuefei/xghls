@@ -97,6 +97,7 @@ public class PersonalCenterActivity extends BaseActivity {
         mTvTitle.setTextColor(Color.parseColor("#ffffff"));
         mRlTitleBg.setBackgroundColor(Color.parseColor("#fe8cab"));
         mTvToTakePartName.setText(mToTakePartName);
+        mIvBack.setVisibility(View.VISIBLE);
     }
 
     private void initDada() {
@@ -105,6 +106,13 @@ public class PersonalCenterActivity extends BaseActivity {
     }
 
     private void initEvent() {
+        //返回键
+        mIvBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         //统计
         mLlStatistical.setOnClickListener(new View.OnClickListener() {
             @Override
