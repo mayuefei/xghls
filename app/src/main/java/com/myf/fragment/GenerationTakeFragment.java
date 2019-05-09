@@ -3,7 +3,9 @@ package com.myf.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -629,6 +631,12 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
             }
             if (!TextUtils.isEmpty(data.get(position).contactsPhone)){
                 holder.mTvContactInformationPhone.setText(data.get(position).contactsPhone);
+                holder.mTvContactInformationPhone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        call(data.get(position).contactsPhone);
+                    }
+                });
             }
             if (!TextUtils.isEmpty(data.get(position).schoolName)){
                 holder.mTvAddressInformation.setText(data.get(position).schoolName);
@@ -683,7 +691,7 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                     holder.mBtnNotToTake.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            getEditOrder(data.get(position).orderId,"8");
+//                            getEditOrder(data.get(position).orderId,"8");
                         }
                     });
                 }
@@ -723,7 +731,7 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
      */
     private EditStatusRespones mEditStatusRespones;
     private void getEditOrder(String orderId,String status1){
-        OkHttpApi.getInstance().getEditStatusRespones(InitComm.init().userToken, orderId, status, new StringCallback() {
+        OkHttpApi.getInstance().getEditStatusRespones(InitComm.init().userToken, orderId, status1, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 ToastUtil.showToast(getActivity(),getString(R.string.netError),Toast.LENGTH_SHORT);
@@ -747,5 +755,14 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                 }
             }
         },TAG);
+    }
+
+    /**
+     * 调用拨号界面
+     */
+    private void call(String phone){
+        Intent intent = new Intent(Intent.ACTION_DIAL,Uri.parse("tel:"+phone));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

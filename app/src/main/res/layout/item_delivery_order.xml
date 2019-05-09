@@ -2,7 +2,8 @@
 <com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    android:paddingBottom="5px">
 
     <com.zhy.autolayout.AutoLinearLayout
         android:layout_width="match_parent"
@@ -14,8 +15,9 @@
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:paddingLeft="24px"
-        android:paddingTop="38px"
-        android:paddingBottom="28px">
+        android:paddingTop="24px"
+        android:paddingBottom="24px"
+        android:layout_marginBottom="10px">
 
         <com.zhy.autolayout.AutoLinearLayout
             android:layout_width="match_parent"
@@ -31,21 +33,20 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="取件编码"
                     android:textColor="#000000"
                     android:textSize="30px" />
 
                 <TextView
                     android:id="@+id/tv_take_a_number"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="135831"
                     android:textColor="@color/cfe8cab"
-                    android:textSize="30px" />
+                    android:textSize="30px"
+                    android:layout_marginLeft="30px"/>
 
             </com.zhy.autolayout.AutoLinearLayout>
 
@@ -87,7 +88,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="76px"
+                android:layout_marginRight="60px"
                 android:text="联系人"
                 android:textColor="#000000"
                 android:textSize="30px" />
@@ -96,7 +97,7 @@
                 android:id="@+id/tv_contact_information_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="80px"
+                android:layout_marginRight="100px"
                 android:text="张分云"
                 android:textColor="@color/cfe8cab"
                 android:textSize="30px"
@@ -122,7 +123,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="50px"
+                android:layout_marginRight="30px"
                 android:text="地址信息"
                 android:textColor="#000000"
                 android:textSize="30px" />
@@ -165,7 +166,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="50px"
+                android:layout_marginRight="30px"
                 android:text="支付日期"
                 android:textColor="#000000"
                 android:textSize="30px" />
