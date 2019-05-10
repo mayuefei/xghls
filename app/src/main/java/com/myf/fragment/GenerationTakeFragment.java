@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import com.myf.model.EditStatusRespones;
 import com.myf.model.OrderListsRespones;
 import com.myf.model.UserInfoRespones;
 import com.myf.okhttp.OkHttpApi;
+import com.myf.util.DialogUtil;
 import com.myf.util.InitComm;
 import com.myf.util.LogUtil;
 import com.myf.util.RefreshListener;
@@ -52,6 +54,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -119,13 +122,17 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
     TextView mTvWqdj;
     @Bind(R.id.tv_yqj)
     TextView mTvYqj;
+    @Bind(R.id.scrollView)
+    ScrollView mScrollView;
+    @Bind(R.id.bt_gotop)
+    Button mBtGotop;
 
     private String orderBy1 = "1";
     private String orderBy2 = "1";
     private String orderBy3 = "1";
     private UserInfoRespones mUserInfoRespones;
     private ArrayList<UserInfoRespones.DataBean.ExpressDataBean> list = new ArrayList<>();
-    private  TheOrderListAdapter mTheOrderListAdapter;
+    private TheOrderListAdapter mTheOrderListAdapter;
     private List<OrderListsRespones.DataBean.OrderDataBean> data = new ArrayList<>();
     private long lastClickTime = 0;//最后点击时间
     // 屏蔽连续的点击事件
@@ -156,15 +163,15 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
 
             @Override
             public void onVisibilityChanged(boolean visible) {
-                if (visible){
+                if (visible) {
 //	                    ToastUtil.showToast(InvestProductQueryActivity.this,"监听到软键盘弹起...1", Toast.LENGTH_SHORT);
-                }else {
+                } else {
 //	                    ToastUtil.showToast(InvestProductQueryActivity.this,"监听到软件盘关闭...2",Toast.LENGTH_SHORT);
                     if (TextUtils.isEmpty(mEtPleaseEnterNumber.getText().toString().trim())) {
                         data.clear();
                         mTheOrderListAdapter.notifyDataSetChanged();
-                        getExpressLists(expressTimeType,status,"","","","","");
-                    }else {
+                        getExpressLists(expressTimeType, status, "", "", "", "", "");
+                    } else {
                         startSeek();
                     }
                 }
@@ -175,6 +182,7 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
     }
 
     private void initView() {
+        mScrollView.smoothScrollTo(0, 0);
         setEditTextInhibitInputSpaChat(mEtPleaseEnterNumber);
         list.clear();
         list.addAll(mUserInfoRespones.data.expressData);
@@ -190,14 +198,14 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
 //        mLlOrderList.setBackgroundResource(R.drawable.bg_time_color);
 //        mTvDormitoryBuilding.setTextColor(Color.parseColor("#ffffff"));
 //        mIvDormitoryBuilding.setImageResource(R.mipmap.user_baiseshang);
-        if (mTheOrderListAdapter == null){
+        if (mTheOrderListAdapter == null) {
             mTheOrderListAdapter = new TheOrderListAdapter();
         }
         mLvTheOrderList.setAdapter(mTheOrderListAdapter);
     }
 
     private void initData() {
-        getExpressLists(expressTimeType,status,"","","","","");
+        getExpressLists(expressTimeType, status, "", "", "", "", "");
     }
 
     private void initEvent() {
@@ -221,7 +229,7 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                         data.clear();
                         mTheOrderListAdapter.notifyDataSetChanged();
                         expressTimeType = "1";
-                        getExpressLists(expressTimeType,status,"","","","","");
+                        getExpressLists(expressTimeType, status, "", "", "", "", "");
                         break;
                     case R.id.rb_afternoon_single://下午单
                         removeStagesTabState();
@@ -235,7 +243,7 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                         data.clear();
                         mTheOrderListAdapter.notifyDataSetChanged();
                         expressTimeType = "2";
-                        getExpressLists(expressTimeType,status,"","","","","");
+                        getExpressLists(expressTimeType, status, "", "", "", "", "");
                         break;
                     case R.id.rb_that_very_day_summarizing://当天汇总
                         removeStagesTabState();
@@ -258,7 +266,7 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                 data.clear();
                 mTheOrderListAdapter.notifyDataSetChanged();
                 status = "1";
-                getExpressLists(expressTimeType,status,"","","","","");
+                getExpressLists(expressTimeType, status, "", "", "", "", "");
             }
         });
         //未取件
@@ -271,7 +279,7 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                 data.clear();
                 mTheOrderListAdapter.notifyDataSetChanged();
                 status = "6";
-                getExpressLists(expressTimeType,status,"","","","","");
+                getExpressLists(expressTimeType, status, "", "", "", "", "");
             }
         });
         //已取件
@@ -284,7 +292,7 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                 data.clear();
                 mTheOrderListAdapter.notifyDataSetChanged();
                 status = "2";
-                getExpressLists(expressTimeType,status,"","","","","");
+                getExpressLists(expressTimeType, status, "", "", "", "", "");
             }
         });
         //搜索按钮
@@ -293,8 +301,8 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
             public void onClick(View view) {
                 //当前时间
                 long currentTime = Calendar.getInstance().getTimeInMillis();
-                if (currentTime-lastClickTime>MIN_CLICK_DELAY_TIME) {
-                    lastClickTime=currentTime;
+                if (currentTime - lastClickTime > MIN_CLICK_DELAY_TIME) {
+                    lastClickTime = currentTime;
                     /* 隐藏软键盘 */
                     InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (inputMethodManager.isActive()) {
@@ -309,7 +317,7 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
         mEtPleaseEnterNumber.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (KeyEvent.KEYCODE_ENTER == i && keyEvent.getAction() == KeyEvent.ACTION_DOWN){
+                if (KeyEvent.KEYCODE_ENTER == i && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                     /* 隐藏软键盘 */
                     InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (inputMethodManager.isActive()) {
@@ -348,11 +356,11 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                 if (orderBy1.equals("1")) {
                     orderBy1 = "2";
                     mIvDormitoryBuilding.setImageResource(R.mipmap.user_baiseshang);
-                    getExpressLists(expressTimeType,status,"","","1","","");
+                    getExpressLists(expressTimeType, status, "", "", "1", "", "");
                 } else {
                     mIvDormitoryBuilding.setImageResource(R.mipmap.user_baisexia);
                     orderBy1 = "1";
-                    getExpressLists(expressTimeType,status,"","","2","","");
+                    getExpressLists(expressTimeType, status, "", "", "2", "", "");
                 }
 
             }
@@ -369,11 +377,11 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                 if (orderBy2.equals("1")) {
                     orderBy2 = "2";
                     mIvPaymentTime.setImageResource(R.mipmap.user_baiseshang);
-                    getExpressLists(expressTimeType,status,"","","1","","");
+                    getExpressLists(expressTimeType, status, "", "", "1", "", "");
                 } else {
                     orderBy2 = "1";
                     mIvPaymentTime.setImageResource(R.mipmap.user_baisexia);
-                    getExpressLists(expressTimeType,status,"","","2","","");
+                    getExpressLists(expressTimeType, status, "", "", "2", "", "");
                 }
             }
         });
@@ -389,11 +397,11 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                 if (orderBy3.equals("1")) {
                     orderBy3 = "2";
                     mIvStateTime.setImageResource(R.mipmap.user_baiseshang);
-                    getExpressLists(expressTimeType,status,"","","1","","");
+                    getExpressLists(expressTimeType, status, "", "", "1", "", "");
                 } else {
                     orderBy3 = "1";
                     mIvStateTime.setImageResource(R.mipmap.user_baisexia);
-                    getExpressLists(expressTimeType,status,"","","2","","");
+                    getExpressLists(expressTimeType, status, "", "", "2", "", "");
                 }
             }
         });
@@ -450,10 +458,10 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
             public void onClick(DialogInterface dialogInterface, int i) {
                 mEtPleaseSelect.setText(list.get(i).express_name);
                 chooseExpressCompanyAlertDialog.dismiss();
-                if (!TextUtils.isEmpty(mEtPleaseSelect.getText().toString().trim())){
+                if (!TextUtils.isEmpty(mEtPleaseSelect.getText().toString().trim())) {
                     data.clear();
                     mTheOrderListAdapter.notifyDataSetChanged();
-                    getExpressLists(expressTimeType,status,list.get(i).id,"","","","");
+                    getExpressLists(expressTimeType, status, list.get(i).id, "", "", "", "");
                 }
             }
         });
@@ -467,15 +475,16 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
     private OrderListsRespones mOrderListsRespones;
     private String expressTimeType = "1";
     private String status = "1";
+
     private void getExpressLists(String expressTimeType, String status, String expressId, String keyword, String dormOrder, String payOrder, String statusOrder) {
-        showLoadingDialog(getActivity(),false);
+        showLoadingDialog(getActivity(), false);
         OkHttpApi.getInstance().getExpressListsRespones(InitComm.init().userToken, InitComm.init().userRoleId, expressTimeType, status, expressId, "", "", keyword, dormOrder, payOrder, statusOrder, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 //刷新完成
                 mPflFrameLayout.refreshComplete();
                 closeLoadingDialog();
-                ToastUtil.showToast(getActivity(),getString(R.string.netError), Toast.LENGTH_SHORT);
+                ToastUtil.showToast(getActivity(), getString(R.string.netError), Toast.LENGTH_SHORT);
             }
 
             @Override
@@ -487,30 +496,30 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                 Gson gson = new Gson();
                 mOrderListsRespones = gson.fromJson(response, OrderListsRespones.class);
                 if (mOrderListsRespones != null) {
-                    if (mOrderListsRespones.code.equals("1")){
+                    if (mOrderListsRespones.code.equals("1")) {
                         //代取快递总数
-                        if (!TextUtils.isEmpty(mOrderListsRespones.data.expressTypeCount)){
+                        if (!TextUtils.isEmpty(mOrderListsRespones.data.expressTypeCount)) {
                             mFragmentCallBack.setValue(mOrderListsRespones.data.expressTypeCount);
                         }
                         //待取件总数
-                        if (!TextUtils.isEmpty(mOrderListsRespones.data.pickCount)){
+                        if (!TextUtils.isEmpty(mOrderListsRespones.data.pickCount)) {
                             mTvPickUpNumber.setText(mOrderListsRespones.data.pickCount);
                         }
                         //未取到件总数
-                        if (!TextUtils.isEmpty(mOrderListsRespones.data.notfindCount)){
+                        if (!TextUtils.isEmpty(mOrderListsRespones.data.notfindCount)) {
                             mTvUncheckNumber.setText(mOrderListsRespones.data.notfindCount);
                         }
                         //已取件总数
-                        if (!TextUtils.isEmpty(mOrderListsRespones.data.distributeCount)){
+                        if (!TextUtils.isEmpty(mOrderListsRespones.data.distributeCount)) {
                             mTvHaveTakenNumber.setText(mOrderListsRespones.data.distributeCount);
                         }
-                        if (mOrderListsRespones.data.orderData != null && mOrderListsRespones.data.orderData.size() > 0){
+                        if (mOrderListsRespones.data.orderData != null && mOrderListsRespones.data.orderData.size() > 0) {
                             for (OrderListsRespones.DataBean.OrderDataBean bean : mOrderListsRespones.data.orderData) {
                                 data.add(bean);
                             }
                         }
-                    }else {
-                        ToastUtil.showToast(getActivity(),mOrderListsRespones.msg,Toast.LENGTH_SHORT);
+                    } else {
+                        ToastUtil.showToast(getActivity(), mOrderListsRespones.msg, Toast.LENGTH_SHORT);
                     }
 
                 } else {
@@ -531,10 +540,11 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
     /**
      * 初始化ptrFrameLayout
      */
-    private void initPtrFrameLayout(){
+    private void initPtrFrameLayout() {
         mPflFrameLayout.addPtrUIHandler(new JZBKLoadingHandler(mPflFrameLayout));
         mPflFrameLayout.setPtrHandler(new PtrDefaultHandler() {
             //刷新开始
@@ -546,35 +556,43 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                         //主线程中改变UI，设置数据
                         refreshData();
                     }
-                },1000);
+                }, 1000);
             }
         });
     }
-    private void refreshData(){
+
+    private void refreshData() {
         //加载的条目
         data.clear();
-        getExpressLists(expressTimeType,status,"","","","","");
+        getExpressLists(expressTimeType, status, "", "", "", "", "");
     }
+
     /**
      * 开始搜索
      */
     private String proCode;
-    private void startSeek(){
+
+    private void startSeek() {
         proCode = mEtPleaseEnterNumber.getText().toString().trim();
-        if (proCode != null && !TextUtils.isEmpty(proCode)){
+        if (proCode != null && !TextUtils.isEmpty(proCode)) {
             data.clear();
             mTheOrderListAdapter.notifyDataSetChanged();
-            getExpressLists(expressTimeType,status,"",mEtPleaseEnterNumber.getText().toString().trim(),"","","");
-        }else {
-            ToastUtil.showToast(getActivity(),"请输入姓名或取件编号",Toast.LENGTH_SHORT);
+            getExpressLists(expressTimeType, status, "", mEtPleaseEnterNumber.getText().toString().trim(), "", "", "");
+        } else {
+            ToastUtil.showToast(getActivity(), "请输入姓名或取件编号", Toast.LENGTH_SHORT);
         }
     }
 
-    class TheOrderListAdapter extends BaseAdapter{
+    @OnClick(R.id.bt_gotop)
+    public void onViewClicked() {
+        mScrollView.smoothScrollTo(0, 0);
+    }
+
+    class TheOrderListAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            return data != null?data.size():0;
+            return data != null ? data.size() : 0;
         }
 
         @Override
@@ -590,9 +608,9 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             ViewHolder holder = null;
-            if (view == null){
+            if (view == null) {
                 //导入布局
-                view = LinearLayout.inflate(getContext(),R.layout.item_delivery_order,null);
+                view = LinearLayout.inflate(getContext(), R.layout.item_delivery_order, null);
                 holder = new ViewHolder();
                 holder.mTvTakeANumber = (TextView) view.findViewById(R.id.tv_take_a_number);
                 holder.mTvCourierCompany = (TextView) view.findViewById(R.id.tv_courier_company);
@@ -610,26 +628,27 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                 holder.mBtnNotToTake = (Button) view.findViewById(R.id.btn_not_to_take);
                 holder.mRlTakeLayout = (AutoRelativeLayout) view.findViewById(R.id.rl_take_layout);
                 view.setTag(holder);
-            }else {
+            } else {
                 holder = (ViewHolder) view.getTag();
             }
-            setItem(holder,i);
+            setItem(holder, i);
             return view;
         }
     }
-    private void setItem(ViewHolder holder,final int position){
+
+    private void setItem(ViewHolder holder, final int position) {
         //加载数据
-        if (data != null && data.size() > 0){
-            if (!TextUtils.isEmpty(data.get(position).pickCode)){
+        if (data != null && data.size() > 0) {
+            if (!TextUtils.isEmpty(data.get(position).pickCode)) {
                 holder.mTvTakeANumber.setText(data.get(position).pickCode);
             }
-            if (!TextUtils.isEmpty(data.get(position).expressName)){
+            if (!TextUtils.isEmpty(data.get(position).expressName)) {
                 holder.mTvCourierCompany.setText(data.get(position).expressName);
             }
-            if (!TextUtils.isEmpty(data.get(position).contactsName)){
+            if (!TextUtils.isEmpty(data.get(position).contactsName)) {
                 holder.mTvContactInformationName.setText(data.get(position).contactsName);
             }
-            if (!TextUtils.isEmpty(data.get(position).contactsPhone)){
+            if (!TextUtils.isEmpty(data.get(position).contactsPhone)) {
                 holder.mTvContactInformationPhone.setText(data.get(position).contactsPhone);
                 holder.mTvContactInformationPhone.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -638,30 +657,30 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                     }
                 });
             }
-            if (!TextUtils.isEmpty(data.get(position).schoolName)){
+            if (!TextUtils.isEmpty(data.get(position).schoolName)) {
                 holder.mTvAddressInformation.setText(data.get(position).schoolName);
             }
-            if (!TextUtils.isEmpty(data.get(position).buildingName)){
+            if (!TextUtils.isEmpty(data.get(position).buildingName)) {
                 holder.mTvDormitoryBuilding.setText(data.get(position).buildingName);
             }
-            if (!TextUtils.isEmpty(data.get(position).dromNum)){
+            if (!TextUtils.isEmpty(data.get(position).dromNum)) {
                 holder.mTvTheDormitory.setText(data.get(position).dromNum);
             }
-            if (!TextUtils.isEmpty(data.get(position).createTime)){
+            if (!TextUtils.isEmpty(data.get(position).createTime)) {
                 holder.mTvPaymentTime.setText(data.get(position).createTime);
             }
-            if (!TextUtils.isEmpty(data.get(position).expressTimeType)){
-                if (data.get(position).expressTimeType.equals("1")){
+            if (!TextUtils.isEmpty(data.get(position).expressTimeType)) {
+                if (data.get(position).expressTimeType.equals("1")) {
                     holder.mTvTheDeliveryTime.setText("中午");
-                }else {
+                } else {
                     holder.mTvTheDeliveryTime.setText("晚上");
                 }
             }
-            if (!TextUtils.isEmpty(data.get(position).remark)){
+            if (!TextUtils.isEmpty(data.get(position).remark)) {
                 holder.mTvNoteInfo.setText(data.get(position).remark);
             }
-            if (!TextUtils.isEmpty(data.get(position).status)){
-                if (data.get(position).status.equals("1")){
+            if (!TextUtils.isEmpty(data.get(position).status)) {
+                if (data.get(position).status.equals("1")) {
                     holder.mLlTheOrderStatus.setVisibility(View.GONE);
                     holder.mRlTakeLayout.setVisibility(View.VISIBLE);
                     holder.mBtnNotToTake.setText("未取到件");
@@ -669,21 +688,21 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                     holder.mBtnTake.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            getEditOrder(data.get(position).orderId,"2");
+                            getEditOrder(data.get(position).orderId, "2");
                         }
                     });
                     //未取到件按钮
                     holder.mBtnNotToTake.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            getEditOrder(data.get(position).orderId,"6");
+                            getEditOrder(data.get(position).orderId, "6");
                         }
                     });
-                }else if (data.get(position).status.equals("2")){
+                } else if (data.get(position).status.equals("2")) {
                     holder.mLlTheOrderStatus.setVisibility(View.VISIBLE);
                     holder.mRlTakeLayout.setVisibility(View.GONE);
                     holder.mTvTheOrderStatus.setText("待揽收");
-                }else if (data.get(position).status.equals("6")){
+                } else if (data.get(position).status.equals("6")) {
                     holder.mLlTheOrderStatus.setVisibility(View.GONE);
                     holder.mRlTakeLayout.setVisibility(View.VISIBLE);
                     holder.mBtnTake.setVisibility(View.GONE);
@@ -698,7 +717,8 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
             }
         }
     }
-    private static class ViewHolder{
+
+    private static class ViewHolder {
         TextView mTvTakeANumber;//取件编号
         TextView mTvCourierCompany;//快递公司
         TextView mTvContactInformationName;//联系人姓名
@@ -718,6 +738,7 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
 
     /**
      * 将Fragment与Activity关联，也就是谁需要Fragment的回调参数，谁实现该接口
+     *
      * @param context
      */
     @Override
@@ -730,38 +751,42 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
      * 代取订单更改状态接口
      */
     private EditStatusRespones mEditStatusRespones;
-    private void getEditOrder(String orderId,String status1){
+
+    private void getEditOrder(String orderId, String status1) {
+        DialogUtil.showLoadingDialog(getContext(), false);
         OkHttpApi.getInstance().getEditStatusRespones(InitComm.init().userToken, orderId, status1, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                ToastUtil.showToast(getActivity(),getString(R.string.netError),Toast.LENGTH_SHORT);
+                ToastUtil.showToast(getActivity(), getString(R.string.netError), Toast.LENGTH_SHORT);
+                closeLoadingDialog();
             }
 
             @Override
             public void onResponse(String response, int id) {
-                LogUtil.e(TAG,response);
+                closeLoadingDialog();
+                LogUtil.e(TAG, response);
                 Gson gson = new Gson();
-                mEditStatusRespones = gson.fromJson(response,EditStatusRespones.class);
+                mEditStatusRespones = gson.fromJson(response, EditStatusRespones.class);
                 if (mEditStatusRespones != null) {
                     if (mEditStatusRespones.code.equals("1")) {
                         data.clear();
                         mTheOrderListAdapter.notifyDataSetChanged();
                         initData();
-                    }else {
-                        ToastUtil.showToast(getActivity(),mEditStatusRespones.msg,Toast.LENGTH_SHORT);
+                    } else {
+                        ToastUtil.showToast(getActivity(), mEditStatusRespones.msg, Toast.LENGTH_SHORT);
                     }
-                }else {
-                    ToastUtil.showToast(getActivity(),"解析失败",Toast.LENGTH_SHORT);
+                } else {
+                    ToastUtil.showToast(getActivity(), "解析失败", Toast.LENGTH_SHORT);
                 }
             }
-        },TAG);
+        }, TAG);
     }
 
     /**
      * 调用拨号界面
      */
-    private void call(String phone){
-        Intent intent = new Intent(Intent.ACTION_DIAL,Uri.parse("tel:"+phone));
+    private void call(String phone) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
