@@ -25,7 +25,7 @@ public interface MyfApi {
      * 登录接口
      */
     public String CARD_URL_LOGIN = COMMON_URL_START + "login";
-    void getLoginRespones(String username,String password,StringCallback callback,String tag);
+    void getLoginRespones(String username,String password,String registration_id,StringCallback callback,String tag);
     /**
      * 骑手端员工信息
      */
@@ -41,5 +41,10 @@ public interface MyfApi {
      */
     public String CARD_EDIT_STATUS = COMMON_URL_START + "edit_status";
     void getEditStatusRespones(String token,String order_id,String status,StringCallback callback,String tag);
+    /**
+     * 关闭订单状态接口
+     */
+    public String CARD_CLOSE_ORDER = COMMON_URL_START + "close_order";
+    void getCloseOrderRespones(String token,String order_id,StringCallback callback,String tag);
 }
 

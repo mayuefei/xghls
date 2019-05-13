@@ -710,7 +710,7 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
                     holder.mBtnNotToTake.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-//                            getEditOrder(data.get(position).orderId,"8");
+                            getCloseOrder(data.get(position).orderId);
                         }
                     });
                 }
@@ -789,5 +789,26 @@ public class GenerationTakeFragment extends BaseFragment implements RefreshListe
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+    /**
+     * 关闭订单接口
+     */
+    private void getCloseOrder(String orderId){
+        showLoadingDialog(getActivity(),false);
+        OkHttpApi.getInstance().getCloseOrderRespones(InitComm.init().userToken, orderId, new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                closeLoadingDialog();
+                ToastUtil.showToast(getActivity(),getString(R.string.netError),Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                closeLoadingDialog();
+                Gson gson = new Gson();
+                LogUtil.e(TAG,response);
+
+            }
+        },TAG);
     }
 }

@@ -113,10 +113,11 @@ public class OkHttpApi implements MyfApi {
      * @param tag
      */
     @Override
-    public void getLoginRespones(String username, String password, StringCallback callback, String tag) {
+    public void getLoginRespones(String username, String password,String registration_id,StringCallback callback, String tag) {
         Map<String,String> params = new HashMap<>();
         params.put("username",username);
         params.put("password",password);
+        params.put("registration_id",registration_id);
         params.put("device_type","android");
         asyncGet(CARD_URL_LOGIN,params,callback);
     }
@@ -180,6 +181,21 @@ public class OkHttpApi implements MyfApi {
         params.put("order_id",order_id);
         params.put("status",status);
         asyncGet(CARD_EDIT_STATUS,params,callback);
+    }
+
+    /**
+     * 关闭订单接口
+     * @param token 判断员工唯一值
+     * @param order_id  订单ID
+     * @param callback
+     * @param tag
+     */
+    @Override
+    public void getCloseOrderRespones(String token, String order_id, StringCallback callback, String tag) {
+        Map<String,String> params= new HashMap<>();
+        params.put("token",token);
+        params.put("order_id",order_id);
+        asyncGet(CARD_CLOSE_ORDER,params,callback);
     }
 
     @Override

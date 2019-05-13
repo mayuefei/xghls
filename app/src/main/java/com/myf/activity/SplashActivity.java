@@ -19,6 +19,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.Call;
 
 public class SplashActivity extends BaseActivity {
@@ -33,6 +34,7 @@ public class SplashActivity extends BaseActivity {
     private CountDownTimer mCountDownTimer;
     private final static long COUNT_DOWN_TIME_TOTAL = 2000L;
     private final static long COUNT_DOWN_TIME_TICK = 1000L;
+    private String registrationID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class SplashActivity extends BaseActivity {
 
                 @Override
                 public void onFinish() {
+                    registrationID = JPushInterface.getRegistrationID(SplashActivity.this);
                     String exit = (String) SharedPreferencesUtil.getSharedPreferences(SplashActivity.this, PersonalCenterActivity.EXIT_KEY, "");
                     if (TextUtils.isEmpty(exit)) {
                         String token = (String) SharedPreferencesUtil.getSharedPreferences(SplashActivity.this,"PREF_USER_ID_KEY","");
@@ -64,7 +67,7 @@ public class SplashActivity extends BaseActivity {
                         //获取账户密码自动登录进入主界面
                         if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(password)){
                             showLoadingDialog(SplashActivity.this,true);
-                            goLogin(account,password);
+                            goLogin(account,password,registrationID);
 
                         }else {
                             //否则进入登录界面
@@ -108,8 +111,8 @@ public class SplashActivity extends BaseActivity {
      * 执行登录
      */
     private LoginRespones mLoginRespones;
-    private void goLogin(String username,String password){
-        OkHttpApi.getInstance().getLoginRespones(username, password,  new StringCallback() {
+    private void goLogin(String username,String password,String registrationId){
+        OkHttpApi.getInstance().getLoginRespones(username, password,registrationId,  new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 closeLoadingDialog();

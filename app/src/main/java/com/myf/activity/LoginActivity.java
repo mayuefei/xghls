@@ -50,6 +50,7 @@ public class LoginActivity extends BaseActivity {
     public static final String PREF_ROLE_PASSWORD_KEY = "PREF_ROLE_PASSWORD_KEY";//用户密码
     private String mUserName;
     private String mPassword;
+    private String registrationID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +81,14 @@ public class LoginActivity extends BaseActivity {
         setEditTextInhibitInputSpaChat(mEtLoginUsername);
         setEditTextInhibitInputSpaChat(mEtLoginPassword);
         mTvTitle.setText("登录");
+        registrationID = JPushInterface.getRegistrationID(LoginActivity.this);
     }
 
     /**
      * 执行登录
      */
-    private void goLogin(String username, String password) {
-        OkHttpApi.getInstance().getLoginRespones(username, password, new StringCallback() {
+    private void goLogin(String username, String password,String registrationId) {
+        OkHttpApi.getInstance().getLoginRespones(username, password,registrationId, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 closeLoadingDialog();
@@ -139,7 +141,7 @@ public class LoginActivity extends BaseActivity {
                     return;
                 }
                 showLoadingDialog(LoginActivity.this, true);
-                goLogin(mUserName, mPassword);
+                goLogin(mUserName, mPassword,registrationID);
                 break;
         }
     }
