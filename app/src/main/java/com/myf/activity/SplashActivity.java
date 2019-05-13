@@ -116,7 +116,8 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onError(Call call, Exception e, int id) {
                 closeLoadingDialog();
-                ToastUtil.showToast(SplashActivity.this,getString(R.string.netError),Toast.LENGTH_SHORT);
+                LoginActivity.actionStart(SplashActivity.this);
+                finish();
             }
 
             @Override
@@ -134,6 +135,8 @@ public class SplashActivity extends BaseActivity {
                         finish();
                     }else {
                         ToastUtil.showToast(SplashActivity.this,mLoginRespones.msg,Toast.LENGTH_SHORT);
+                        LoginActivity.actionStart(SplashActivity.this);
+                        finish();
                     }
                 }else {
                     ToastUtil.showToast(SplashActivity.this,"解析失败",Toast.LENGTH_SHORT);
